@@ -27,3 +27,36 @@ http 作为根开始配置, 每一个and()对应了一个模块的配置(等同�
 - SessionManagementFilter 和 session 相关的过滤器，内部维护了一个 SessionAuthenticationStrategy，两者组合使用，常用来防止 session-fixation protection attack，以及限制同一用户开启多个会话的数量
 - ExceptionTranslationFilter 直译成异常翻译过滤器，还是比较形象的，这个过滤器本身不处理异常，而是将认证过程中出现的异常交给内部维护的一些类去处理，具体是那些类下面详细介绍
 - FilterSecurityInterceptor 这个过滤器决定了访问特定路径应该具备的权限，访问的用户的角色，权限是什么？访问的路径需要什么样的角色和权限？这些判断和处理都是由该类进行的。
+
+
+ExceptionTranslationFilter 本身并不会对异常进行处理, 而是将异常进行分发交给别的进行处理。
+一般只处理两大异常 AccessDeniedException 访问异常 和 AuthenticationException 认证异常
+AuthenticationException -> AuthenticationEntryPoint 去处理
+AccessDeniedException ->
+    1. 如果当前用户是匿名用户 -> AuthenticationEntryPoint
+    2. 不是匿名用户 -> AccessDeniedHandler
+
+FilterSecurityInterceptor 作用是访问控制, 会从安全上下文中拿到用户拥有的角色权限 和 目标资源需要的角色权限进行对比。是否满足访问条件
+
+
+Authentication -> token
+一般有两个构造方法, 一个是认证前用的构造后给 authenticationManager 使用 认证
+                 一个是认证后使用的. 填充权限信息
+
+
+DelegatingFilterProxy Spring Web 中的类 而并不是 spring security 中的类 实现了 Filter 接口 Web 容器中名字叫 springSecurityFilterChain
+    private volatile Filter delegate -> FilterChainProxy 是spring security 的类
+
+FilterChainProxy 实现了 Filter接口 Web 容器中 名字叫 springSecurityFilterChain
+    private List<SecurityFilterChain> filterChains;
+    内部维护了一个 SecurityFilterChain的列表. 同一个 spring 环境下可能存在多个安全过滤器, 需要经过 chain.mateches(request) 判断
+列表中的哪一条过滤器链会匹配成功, 每个 request 最多指挥经过一个 SecurityFilterChain. 因为 Web 环境下可能有多种安全保护策略, 每一种策略
+都需要有自己的一条链路, 比如 Oauth2 服务, 极端条件下, 可能同一个服务本身即使资源服务器, 又是认证服务器, 还需要做 Web 安全!
+
+SecurityFilterChain -> DefaultSecurityFilterChain
+    private final List<Filter> filters; 就是之前分析过的一系列过滤器 
+        - UsernamePasswordAuthenticationFilter，
+        - SecurityContextPersistenceFilter，
+        - FilterSecurityInterceptor
+        ...
+
