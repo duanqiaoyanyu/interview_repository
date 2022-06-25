@@ -55,3 +55,14 @@ accessToken 然后只是拿 refreshToken 去换 accessToken 然后也是走的�
 会作废然后用新的 refreshToken 跟 accessToken 绑定起来了, 所以说采用重新拿, 只有从 accessToken 里新拿出来的 refreshToken 才是
 和 accessToken 是一套的, 之前的用于生成新 accessToken 的老 refreshToken 已经作废掉了. 这是我猜的, 后续作验证. 在继续研究研究
 8. 与 accessToken 绑定的 refreshToken 是不是空. 不是空的话, 那就把它存入 tokenStore
+
+资源服务器 
+ResourceServerSecurityConfigurer
+    为 OAuth2AuthenticationProcessingFilter 提供固定的 AuthenticationManager 即 OAuth2AuthenticationManager，
+    它并没有将 OAuth2AuthenticationManager 添加到 spring 的容器中，不然可能会影响 spring security 的普通认证流程（非 oauth2 请求），
+    只有被 OAuth2AuthenticationProcessingFilter 拦截到的 oauth2 相关请求才被特殊的身份认证器处理。
+OAuth2AuthenticationProcessingFilter 核心过滤器
+OAuth2AuthenticationManager OAuth2 的身份管理器
+在之前的 OAuth2 核心过滤器中出现的 AuthenticationManager 其实在我们意料之中，携带 access_token 必定得经过身份认证，但是在我们 debug 进入其中后，
+发现了一个出乎意料的事，AuthenticationManager 的实现类并不是我们在前面文章中聊到的常用实现类 ProviderManager，而是 OAuth2AuthenticationManager。
+新的 AuthenticationManager 实现类 OAuth2AuthenticationManager,这里要强调的是 OAuth2AuthenticationManager 是密切与 token 认证相关的，而不是与获取 token 密切相关的。
