@@ -23,11 +23,14 @@ http 作为根开始配置, 每一个and()对应了一个模块的配置(等同�
 - UsernamePasswordAuthenticationFilter 这个会重点分析，表单提交了 username 和 password，被封装成 token 进行一系列的认证，便是主要通过这个过滤器完成的，在表单认证的方法中，这是最最关键的过滤器。
 - RequestCacheAwareFilter (文档中并未介绍，非核心过滤器) 内部维护了一个 RequestCache，用于缓存 request 请求
 - SecurityContextHolderAwareRequestFilter 此过滤器对 ServletRequest 进行了一次包装，使得 request 具有更加丰富的 API
-- AnonymousAuthenticationFilter 匿名身份过滤器，这个过滤器个人认为很重要，需要将它与 UsernamePasswordAuthenticationFilter 放在一起比较理解，spring security 为了兼容未登录的访问，也走了一套认证流程，只不过是一个匿名的身份。
+- AnonymousAuthenticationFilter 匿名身份过滤器，这个过滤器个人认为很重要，需要将它与 UsernamePasswordAuthenticationFilter 放在一起比较理解，spring security 为了兼容未登录的访问，也走了一套认证流程，只不过是一个匿名的身份, 顺序很有讲究, 在 UsernamePasswordAuthenticationFilter 之后, 相当于
+前面的身份认证都没有通过, 那么就会给他分配一个匿名用户, 生成一个匿名 AnonymousAuthenticationToken, 用户名为 "anonymousUser" 权限为
+  "ROLE_ANONYMOUS".
 - SessionManagementFilter 和 session 相关的过滤器，内部维护了一个 SessionAuthenticationStrategy，两者组合使用，常用来防止 session-fixation protection attack，以及限制同一用户开启多个会话的数量
 - ExceptionTranslationFilter 直译成异常翻译过滤器，还是比较形象的，这个过滤器本身不处理异常，而是将认证过程中出现的异常交给内部维护的一些类去处理，具体是那些类下面详细介绍
 - FilterSecurityInterceptor 这个过滤器决定了访问特定路径应该具备的权限，访问的用户的角色，权限是什么？访问的路径需要什么样的角色和权限？这些判断和处理都是由该类进行的。
-
+  AccessDecisionManager 决定用户是否具备访问某个资源的权限，具体的实现类是 AffirmativeBased。投票方法, 如果有一个授权通过了那就直接放行，
+  最后判断 deny 如果 > 0, 就抛出 AccessDeniedException 异常。
 
 ExceptionTranslationFilter 本身并不会对异常进行处理, 而是将异常进行分发交给别的进行处理。
 一般只处理两大异常 AccessDeniedException 访问异常 和 AuthenticationException 认证异常
