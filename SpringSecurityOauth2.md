@@ -68,3 +68,4 @@ OAuth2AuthenticationManager OAuth2 的身份管理器
 新的 AuthenticationManager 实现类 OAuth2AuthenticationManager,这里要强调的是 OAuth2AuthenticationManager 是密切与 token 认证相关的，而不是与获取 token 密切相关的。
 
 ...continue
+teacher继续开发
