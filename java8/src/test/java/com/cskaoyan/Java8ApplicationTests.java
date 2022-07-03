@@ -2,15 +2,21 @@ package com.cskaoyan;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Pair;
+import cn.hutool.core.lang.copier.Copier;
 import cn.hutool.core.map.MapUtil;
 import com.cskaoyan.function.KaoYanAction;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -78,4 +84,31 @@ class Java8ApplicationTests {
         //}; 解决的.
         // 现在到了 java8。直接用 lambda 表达式来代替了以往的匿名类的方式了
     }
+
+    @Test
+    public void test3() {
+        List<List<List<String>>> list = new ArrayList<>();
+        List<List<String>> collect = list
+                .stream()
+                .flatMap(l -> l.stream())
+                .collect(Collectors.toList());
+    }
+
+    // 所以说 flatMap 要理解好他的功能和用处, 只需要关注他方法的定义就好了
+    // <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper);
+    // R 是 stream 流要返回的对象类型. T 是 stream 在进行 map 操作之前里面保存的对象类型
+    // 所以进行 flatMap 操作结束后是一个 R 类型的流, 不是 List<R>. 这点和 map 保持一致, map 里面也是 R
+    // 然后入参是一个 Function 函数式接口, 我们通常用 lambda 表达式去实现它。Function函数通常有一个
+    // 入参类型 和 一个出惨类型。这里入参类型就是 当前 stream 流里对象的类型, 然后出参呢就是一个 Stream 流的一个
+    // 对象 然后 stream 流里面的对象类型也就是我们 flatMap 最终要返回的 stream 流类型的对象. 但是呢, 相当于是
+    // 当前 还未进行 flatMap 操作的 stream 流里的每一个元素经过转化都能得到一个 R 类型对象的流对象, 然后呢
+    // flatMap 的作用呢就是能够把这些流对象里面的所有的 R 对象全部取出来, 然后汇总到未进行 flatMap 操作前的
+    // 那条流里面去。这样相当于是 转化前的所有对象 经过转化后的所有映射集 全部平铺到一个流里面去了。
+    // 另外 flatMap 也是有相对的概念的, 不是说无脑的把无论多少层级的集合结构全部压成只有一层, 这种理解是不对的。
+    // 还是要回归到方法定义的本身上去看, 分清当前的 T 类型是什么, 而想得到的 R 又是什么类型。
+
+    // 总结: 看清方法定义 分清 T类型是谁, R类型是谁
+    //      解决了什么问题, 解决了以往入参每一个元素的映射结果都是一个集合, 然后最终我们只关心映射集合的汇总结果,
+    //      以往的 map 就会导致, 我们依然需要再进行一次遍历, 将每一个映射结果集合汇总到一个新的集合中。
+    //      有了 flatMap 就能直接跳过再一次遍历的过程, 直接将映射结果集合里面的元素汇总到一个流中去。
 }
