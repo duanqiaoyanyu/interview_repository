@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +119,7 @@ class Java8ApplicationTests {
     @Test
     public void test4() {
         KaoYanFunction<Integer, String> function = Java8ApplicationTests::referencedFunction;
+        System.out.println(function.apply(2));
     }
 
     public static String referencedFunction(Integer param) {
@@ -140,4 +143,11 @@ class Java8ApplicationTests {
     // 例如 <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper);
     // 传入 Collection::stream 也是对的。所以不要怀疑,
     // 另外 String.compareTo() 和 int Comparator<String>.compare(String, String) 也能匹配
+
+    @Test
+    public void test5() {
+        List<String> list = Arrays.asList("7", "9", "1", "3");
+        list.sort(String::compareTo);
+        System.out.println(list);
+    }
 }
