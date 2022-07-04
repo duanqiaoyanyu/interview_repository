@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Pair;
 import cn.hutool.core.lang.copier.Copier;
 import cn.hutool.core.map.MapUtil;
 import com.cskaoyan.function.KaoYanAction;
+import com.cskaoyan.function.KaoYanFunction;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -90,7 +91,7 @@ class Java8ApplicationTests {
         List<List<List<String>>> list = new ArrayList<>();
         List<List<String>> collect = list
                 .stream()
-                .flatMap(l -> l.stream())
+                .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
@@ -111,4 +112,32 @@ class Java8ApplicationTests {
     //      解决了什么问题, 解决了以往入参每一个元素的映射结果都是一个集合, 然后最终我们只关心映射集合的汇总结果,
     //      以往的 map 就会导致, 我们依然需要再进行一次遍历, 将每一个映射结果集合汇总到一个新的集合中。
     //      有了 flatMap 就能直接跳过再一次遍历的过程, 直接将映射结果集合里面的元素汇总到一个流中去。
+
+
+    @Test
+    public void test4() {
+        KaoYanFunction<Integer, String> function = Java8ApplicationTests::referencedFunction;
+    }
+
+    public static String referencedFunction(Integer param) {
+        return "response";
+    }
+
+    // 方法引用是一个 lambda 表达式, 然后也是为了解决简化 函数式接口实现类的问题,
+    // 本来我们的 lambda 表达式相比较于传统的写一个匿名内部类对象的方式比较简洁了,
+    // 那我们的 方法引用解决了什么问题呢? 那就是我们的 lambda 表达式中使用到了已经存在的
+    // 方法并且, 我们引用的方法能够解决函数式接口定义的抽象方法, 意思就是说我们引用的
+    // 方法的入参和出参都和函数式接口定义的入参出参一致, 这样的情况下我们就可以用方法引用代替 lambda 表达式,
+    // 我们读取代码的时候遇到方法引用怎么理解呢, 相当于我们可以理解为他就是执行了引用方法的内容, 比较直观,
+    // 就相当于我只要只要调用了某个方法, 而我并不用像传统的 lambda 表达式去关心他做了什么, 至于到底做了什么, 可以
+    // 在具体的方法定义中查看, 比起 lambda 表达式再去嵌套一层再去调用方法会显得更加简洁。
+
+    // 什么时候适合使用。 需要一个函数式接口, 并且方法可以覆盖函数式接口的定义
+    // 什么时候不适合使用。方法不能覆盖函数式接口的定义, 无论是入参还是出参不满足。都不适合
+
+    // 注意: 有些时候你看起来好像方法引用的方法 "看起来" 好像没有覆盖函数式对应的接口,
+    // 不用担心只要 IDEA 没报错, 那他就是对的。只不过有些隐含参数你没看到而已, 或者是一些特殊的函数
+    // 例如 <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper);
+    // 传入 Collection::stream 也是对的。所以不要怀疑,
+    // 另外 String.compareTo() 和 int Comparator<String>.compare(String, String) 也能匹配
 }
