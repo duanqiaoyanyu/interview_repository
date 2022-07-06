@@ -20,6 +20,7 @@
     <modules>
         <module>relative-path</module>
         <module>regex</module>
+        <module>java8</module>
     </modules>
 
     <properties>
