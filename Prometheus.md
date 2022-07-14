@@ -26,7 +26,7 @@
 
 
 
-
+#### 普罗米修斯 安装和启动
 
 ```sh
 # 下载普罗米修斯
@@ -52,7 +52,7 @@ chown -R root:root prometheus
 
 
 
-
+#### Prometheus 配置
 
 ```yml
 # my global config
@@ -111,8 +111,45 @@ scrape_configs:
 
 
 
-```sh
+#### Prometheus Rule
 
+```yml
+groups:
+  - name: example
+    rules:
+
+     #     RabbitmqTooManyUnackMessages
+     # - alert: RabbitmqTooManyUnackMessages
+     #   expr: sum(rabbitmq_queue_messages_unacked) BY (queue) > 0
+     #   for: 1m
+     #   labels:
+     #     severity: warning
+     #   annotations:
+     #     summary: Rabbitmq too many unack messages (instance {{ $labels.instance }})
+     #     description: "Too many unacknowledged messages\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - alert: RabbitmqNoQueueConsumer
+        expr: rabbitmq_queue_consumers < 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Rabbitmq no queue consumer (instance {{ $labels.instance }})
+          description: "A queue has less than 1 consumer\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      - alert: RabbitmqTooManyUnackMessages
+        expr: rabbitmq_queue_messages{queue=~".*.dlq"} > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Rabbitmq queue exist unack messages (instance {{ $labels.instance }})
+          description: "exist unacknowledged messages\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}\n QUEUE = {{ $labels.queue }}"
+```
+
+
+
+#### Alert Manager 启动和安装
+```sh
 # 下载 alertmanager
 https://github.com/prometheus/alertmanager
 
@@ -133,19 +170,24 @@ chown -R root:root alertmanager
 
 
 
+#### Alert Manager 配置文件
+
 ```yml
 global:
   # The smarthost and SMTP sender used for mail notifications.
-  smtp_smarthost: 'localhost:25'
-  smtp_from: 'alertmanager@example.org'
+  smtp_smarthost: 'smtp.exmail.qq.com:465'
+  smtp_from: 'username@domain.com'
+  smtp_auth_username: 'username@domain.com'
+  smtp_auth_password: 'password'
+  # 和安全登录相关的, 如果邮件发送不成功。则可能需要将 “smtp_require_tls” 置为 false。默认值是 true
+  smtp_require_tls: false
+
+# The directory from which notification templates are read.
+templates:
+  - 'template/*.tmpl'
 
 # The root route on which each incoming alert enters.
 route:
-  # The root route must not have any matchers as it is the entry point for
-  # all alerts. It needs to have a receiver configured so alerts that do not
-  # match any of the sub-routes are sent to someone.
-  receiver: 'team-X-mails'
-
   # The labels by which incoming alerts are grouped together. For example,
   # multiple alerts coming in for cluster=A and alertname=LatencyHigh would
   # be batched into a single group.
@@ -155,7 +197,7 @@ route:
   # alerts as-is. This is unlikely to be what you want, unless you have
   # a very low alert volume or your upstream notification system performs
   # its own grouping. Example: group_by: [...]
-  group_by: ['alertname', 'cluster']
+  group_by: ['alertname']
 
   # When a new group of alerts is created by an incoming alert, wait at
   # least 'group_wait' to send the initial notification.
@@ -172,91 +214,112 @@ route:
   # resend them.
   repeat_interval: 3h
 
+  # A default receiver
+  receiver: team-X-mails
+
   # All the above attributes are inherited by all child routes and can
   # overwritten on each.
-
-  # The child route trees.
-  routes:
-  # This routes performs a regular expression match on alert labels to
-  # catch alerts that are related to a list of services.
-  - match_re:
-      service: ^(foo1|foo2|baz)$
-    receiver: team-X-mails
-
-    # The service has a sub-route for critical alerts, any alerts
-    # that do not match, i.e. severity != critical, fall-back to the
-    # parent node and are sent to 'team-X-mails'
-    routes:
-    - match:
-        severity: critical
-      receiver: team-X-pager
-
-  - match:
-      service: files
-    receiver: team-Y-mails
-
-    routes:
-    - match:
-        severity: critical
-      receiver: team-Y-pager
-
-  # This route handles all alerts coming from a database service. If there's
-  # no team to handle it, it defaults to the DB team.
-  - match:
-      service: database
-
-    receiver: team-DB-pager
-    # Also group alerts by affected database.
-    group_by: [alertname, cluster, database]
-
-    routes:
-    - match:
-        owner: team-X
-      receiver: team-X-pager
-
-    - match:
-        owner: team-Y
-      receiver: team-Y-pager
-
 
 # Inhibition rules allow to mute a set of alerts given that another alert is
 # firing.
 # We use this to mute any warning-level notifications if the same alert is
 # already critical.
 inhibit_rules:
-- source_matchers:
-    - severity="critical"
-  target_matchers:
-    - severity="warning"
-  # Apply inhibition if the alertname is the same.
-  # CAUTION: 
-  #   If all label names listed in `equal` are missing 
-  #   from both the source and target alerts,
-  #   the inhibition rule will apply!
-  equal: ['alertname']
+  - source_matchers: [severity="critical"]
+    target_matchers: [severity="warning"]
+    # Apply inhibition if the alertname is the same.
+    # CAUTION:
+    #   If all label names listed in `equal` are missing
+    #   from both the source and target alerts,
+    #   the inhibition rule will apply!
+    equal: ['alertname', 'dev', 'instance']
 
 
 receivers:
-- name: 'team-X-mails'
-  email_configs:
-  - to: 'team-X+alerts@example.org, team-Y+alerts@example.org'
+  - name: 'team-X-mails'
+    email_configs:
+      - to: 'receiver@domain.com'
+      
+```
 
-- name: 'team-X-pager'
-  email_configs:
-  - to: 'team-X+alerts-critical@example.org'
-  pagerduty_configs:
-  - routing_key: <team-X-key>
 
-- name: 'team-Y-mails'
-  email_configs:
-  - to: 'team-Y+alerts@example.org'
 
-- name: 'team-Y-pager'
-  pagerduty_configs:
-  - routing_key: <team-Y-key>
+一些用法:
 
-- name: 'team-DB-pager'
-  pagerduty_configs:
-  - routing_key: <team-DB-key>
+告警规则中 AlertRule中涉及到 expr 表达式。然后需要学习相关的自定义的写法就是需要 PromeQL 
+
+PromeQL 的写法以及语法
+
+https://prometheus.io/docs/prometheus/latest/querying/basics/
+
+
+
+Prometheus 配置 configuration
+
+```sh
+<relabel_config>
+Relabeling is a powerful tool to dynamically rewrite the label set of a target before it gets scraped. Multiple relabeling steps can be configured per scrape configuration. They are applied to the label set of each target in order of their appearance in the configuration file.
+
+Initially, aside from the configured per-target labels, a target's job label is set to the job_name value of the respective scrape configuration. The __address__ label is set to the <host>:<port> address of the target. After relabeling, the instance label is set to the value of __address__ by default if it was not set during relabeling. The __scheme__ and __metrics_path__ labels are set to the scheme and metrics path of the target respectively. The __param_<name> label is set to the value of the first passed URL parameter called <name>.
+
+The __scrape_interval__ and __scrape_timeout__ labels are set to the target's interval and timeout. This is experimental and could change in the future.
+
+Additional labels prefixed with __meta_ may be available during the relabeling phase. They are set by the service discovery mechanism that provided the target and vary between mechanisms.
+
+Labels starting with __ will be removed from the label set after target relabeling is completed.
+
+If a relabeling step needs to store a label value only temporarily (as the input to a subsequent relabeling step), use the __tmp label name prefix. This prefix is guaranteed to never be used by Prometheus itself.
+
+relabel 是一个强有力的 可以使得 被抓取 target 的 label 集合进行重写， 每一个抓取配置可以有多个 relabel 步骤. 他们被应用到出现在配置文件中的每一个 target 的标签集中. 最初的，除了每一个配置的标签，一个target的job标签被设置为 scrape配置相应的 job_name的值。 __address__ 标签被设置为 targe的地址。在 relabeling 之后，如果 instance 标签 在relabelling这个过程中没有被设置值, instance 标签默认被设置为 __address__ 的值。__scheme__ 和 __metrics_path__ 标签分别被设置为 target的 协议和指标的值. __param_<name> 标签被设置为第一个 传过来叫 <name>的 url 参数的值。
+
+在 relabelling 结束后，以 __开头的标签都会被移除标签集合
+如果只是暂时的存储（作为随后的 relabelling 步骤的输入参数），使用 __tmp 标签开头。这个前缀可以保证永远不会被 Prometheus 自己使用
+
+配置文件中有多个地方可以配置 relabel
+
+
+# List of target relabel configurations.
+# 配置的是要对 一些元信息的重写过程。过滤 保留等等。。
+relabel_configs:
+  [ - <relabel_config> ... ]
+
+# List of metric relabel configurations.
+# 对指标进行 relabel 过程。经常是用来通过标签来过滤具有指定标签的指标，一般不处理时间序列。因为开销很大
+metric_relabel_configs:
+  [ - <relabel_config> ... ]
+
+
+# Alerting specifies settings related to the Alertmanager.
+# 配置到 alertmanager 之前需要经过 relabel过程。相当于 alert manager 拿到的最后是经过这一层之后的 标签集
+alerting:
+  alert_relabel_configs:
+    [ - <relabel_config> ... ]
+  alertmanagers:
+    [ - <alertmanager_config> ... ]
+
+```
+
+
+
+
+
+```sh
+# 参考资料
+# Prometheus 官方文档
+1. https://prometheus.io/docs/introduction/first_steps/
+
+# rabbitmq-Prometheus 官方文档
+2. https://www.rabbitmq.com/prometheus.html
+
+# 常见的告警规则写法
+3. https://awesome-prometheus-alerts.grep.to/rules#rabbitmq
+4. https://chenzhonzhou.github.io/categories/%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F/prometheus/
+5. https://blog.csdn.net/li4528503/article/details/106709682
+6. https://www.51cto.com/article/683864.html
+7. https://www.jianshu.com/p/b47e8a7d7b25
+8. https://juejin.cn/post/7103152042658496525
+9. https://aeric.io/post/rabbitmq-prometheus-monitoring/
+10. https://blog.csdn.net/yaomingyang/article/details/104037083
+11. https://www.cnblogs.com/hahaha111122222/p/15683696.html
 ```
 
