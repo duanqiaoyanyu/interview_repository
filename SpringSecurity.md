@@ -63,3 +63,25 @@ SecurityFilterChain -> DefaultSecurityFilterChain
         - FilterSecurityInterceptor
         ...
 
+
+
+集群环境 session 处理
+1. 添加spring-session-data-redis依赖
+```xml
+      <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
+<dependency>
+    <groupId>org.springframework.session</groupId>
+    <artifactId>spring-session-data-redis</artifactId>
+    <version>2.7.0</version>
+</dependency>
+```
+
+配置Spring-session存储策略
+```yaml
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  session:
+    store-type: redis
+```
