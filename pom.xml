@@ -25,7 +25,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <interview-repository.version>1.3.0</interview-repository.version>
+        <interview-repository.version>1.4.0</interview-repository.version>
     </properties>
 
     <dependencies>
