@@ -2,10 +2,11 @@ package com.cskaoyan;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Pair;
-import cn.hutool.core.lang.copier.Copier;
 import cn.hutool.core.map.MapUtil;
 import com.cskaoyan.function.KaoYanAction;
+import com.cskaoyan.function.KaoYanConsumer;
 import com.cskaoyan.function.KaoYanFunction;
+import com.cskaoyan.function.KaoYanSupplier;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,17 +14,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-class Java8ApplicationTests {
+public class Java8ApplicationTests {
 
     @Test
     public void test1() {
@@ -149,5 +146,70 @@ class Java8ApplicationTests {
         List<String> list = Arrays.asList("7", "9", "1", "3");
         list.sort(String::compareTo);
         System.out.println(list);
+    }
+
+    @Test
+    public void test6() {
+        List<String> formerList = CollUtil.newArrayList("1", "2", "3");
+        List<String> laterList = CollUtil.newArrayList("4", "5", "6");
+        laterList.forEach(l -> {
+            formerList.add(l);
+        });
+        System.out.println(formerList);
+        System.out.println(laterList);
+    }
+
+    @Test
+    public void test7() {
+        // 注意这种写法是错误的, 因为 Function 函数必须要有一个返回值, 而 void 返回不能视为一个正常的返回, 它是空
+//        KaoYanFunction kaoYanConsumer = t -> consumerMethod("2");
+    }
+
+    /**
+     *  KaoYanConsumer kaoYanConsumer = t -> consumerMethod("2");
+     *  KaoYanConsumer fakeKaoYanConsumer = t -> fakeConsumerMethod("2");
+     *  这两种写法都是对的, 这里就需要理解到. 首先 consumer是需要一个参数然后只做事情的方法, 不需要返回值。
+     *  所以在这种情况下 函数式接口根本就不关心返回值是什么, 它不关心你返回值是什么类型. 是有意义的类型 boolean 还是没有返回值的类型 void
+     *  都无所谓, 它都不关心. 所以这里的写法就都是对的。因为他们都是接受一个参数然后做事情的方法, 虽然他们看起来像是两个 Function,
+     *  一个返回 void, 一个返回 boolean。但因为 consumer不关心, 所以这里可以过。
+     *
+     *  // 或者我们可以这样理解, 通常情况下我们认为这种没有花括号的 lambda 表达式, 认为它就是做一件事情。然后别的不用关心,
+     *  而 我们的 函数式接口需要返回值时, 我们才考虑到它的和返回值有关的定义, 没有花括号的不用写 return 直接把 lambda 表达式的接口
+     *  返回了, 并且 void 不能算作正常的返回值
+     */
+    @Test
+    public void test8() {
+         KaoYanConsumer kaoYanConsumer = t -> consumerMethod("2");
+         KaoYanConsumer fakeKaoYanConsumer = t -> fakeConsumerMethod("2");
+    }
+
+    /**
+     * 从这里我们又可以认识到 Function 是关心入参和出参. 所以 我们写的 lambda 表达式就会收到检测。然后这个时候我们的 返回值就有意义了,
+     * 我们必要要有返回值, 并且返回值还不能是 void. void 类型 Function 接口不认为他是一个正常的返回值。所以不会通过
+     * 所以我们知道我们的 lambda 表达式只是一个表达式, 在不同的函数式接口中需要满足不同的规则。我们只需要写的 lambda 表达式满足了
+     * 函数式接口关心的那部分即可, 至于函数式接口不关心的部分是什么都无所谓的。这点看 consumer 接口 和 function 对比两个例子就很好理解了
+     */
+    @Test
+    public void test9() {
+        // 错误写法
+        // KaoYanFunction kaoYanConsumer = t -> consumerMethod("2");
+        // 正确写法
+        KaoYanFunction fakeKaoYanConsumer = t -> fakeConsumerMethod("2");
+        // 错误写法
+        // KaoYanFunction<String, Void> fakeKaoYanConsumer = t -> consumerMethod("2");
+    }
+
+    @Test
+    public void test10() {
+        KaoYanSupplier kaoYanSupplier = () -> "22222";
+    }
+
+    public void consumerMethod(String t) {
+        System.out.println(t);
+        System.out.println("consumer");
+    }
+
+    public boolean fakeConsumerMethod(String t) {
+        return true;
     }
 }
