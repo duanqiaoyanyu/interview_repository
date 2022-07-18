@@ -2,7 +2,7 @@ ps -ef
 ps -aux
 top
 df
-
+chown -R user:usergroup dirctory
 
 
 tar:
