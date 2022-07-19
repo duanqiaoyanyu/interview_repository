@@ -3,7 +3,8 @@ ps -aux
 top
 df
 chown -R user:usergroup dirctory
-
+// 查看指定端口进程
+lsof -i:端口号
 
 tar:
     - z 通过 gzip 指令处理备份文件。
