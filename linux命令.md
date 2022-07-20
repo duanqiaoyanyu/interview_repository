@@ -13,3 +13,11 @@ tar:
     - v(verbose) 显示指令执行过程
     - f(file) 压缩文件
     - C 目的目录
+
+
+
+vim 取消高亮
+命令行模式下
+```shell
+:noh
+```
