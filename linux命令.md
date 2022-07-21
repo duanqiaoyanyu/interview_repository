@@ -21,3 +21,6 @@ vim 取消高亮
 ```shell
 :noh
 ```
+
+// 根据关键字查找文件
+find <directory> -name "keyword"
