@@ -24,3 +24,11 @@ vim 取消高亮
 
 // 根据关键字查找文件
 find <directory> -name "keyword"
+
+// 从本地服务器 复制到 远程服务器
+scp local_file remote_username@remote_ip:remote_directory 只是指定了文件目录, 名字不变
+scp local_file remote_username@remote_ip:remote_directory/remote_file 指定了文件目录和文件名
+
+// 从远程服务器 复制到 本地服务器
+scp remote_username@remote_ip:remote_directory/remote_file local_directory
+scp remote_username@remote_ip:remote_directory/remote_file local_directory/local_file
