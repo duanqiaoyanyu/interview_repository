@@ -3,6 +3,7 @@ ps -aux
 top
 df
 chown -R user:usergroup dirctory
+
 // 查看指定端口进程
 lsof -i:端口号
 
