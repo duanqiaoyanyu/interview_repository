@@ -21,6 +21,7 @@
         <module>relative-path</module>
         <module>regex</module>
         <module>java8</module>
+        <module>design-pattern</module>
     </modules>
 
     <properties>
