@@ -33,3 +33,15 @@ scp local_file remote_username@remote_ip:remote_directory/remote_file 指定了�
 // 从远程服务器 复制到 本地服务器
 scp remote_username@remote_ip:remote_directory/remote_file local_directory
 scp remote_username@remote_ip:remote_directory/remote_file local_directory/local_file
+
+#### tail
+```shell
+# 显示文件末尾内容
+tail -f n 5 xxx.log
+
+# 循环查看文件内容
+tail -f xxx.log
+
+# 从第五行开始显示文件
+tail -n +5 xxx.log
+```
