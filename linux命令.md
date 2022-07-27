@@ -70,3 +70,22 @@ tail -n +5 xxx.log
 # 给 file 的拥有者分配 读、写、执行 (7) 的权限, 给 file 的所在组分配读、执行 (5) 的权限, 给其他组分配执行(1)的权限
   chmod 751 file
 ```
+
+#### chgrp
+> 说明:
+通过群组识别码改变文件群组属性, 100 为 users 群组的识别码, 具体群组和群组识别码可以去 /etc/group 文件中查看
+```shell
+# 改变文件的群组属性
+  # 将 xxx.log 文件由原有群组改为 group_name 群组
+  chgrp -v group_name xxx.log
+  
+# 根据指定文件改变文件的群组属性
+  # 改变文件 yyy.log 的群组属性, 使得文件 yyy.log 的群组属性和参考文件 xxx.log 的群组属性相同
+  chgrp --reference=xxx.log yyy.log
+  
+# 改变指定目录以及其子目录下的所有文件的群组属性
+  chgrp -R group_name directory_name
+  
+# 通过群组识别码改变文件群组属性
+  chgrp -R 100 directory_name
+```
