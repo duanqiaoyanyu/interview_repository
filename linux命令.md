@@ -89,3 +89,20 @@ tail -n +5 xxx.log
 # 通过群组识别码改变文件群组属性
   chgrp -R 100 directory_name
 ```
+
+#### chown
+```shell
+# 改变拥有者和群组
+  chown username group_name xxx.log
+  
+# 改变文件拥有者和群组
+  # 省略后面的群组, 将群组也改为 username 对应的群组
+  chown username: xxx.log
+  
+# 改变文件群组
+  # 只会改变对应的群组为 group_name
+  chown :group_name xxx.log
+  
+# 改变指定目录以及其子目录下的所有文件的拥有者和群组(-v 显示详细的处理信息)
+  chown -R -v username:group_name xxx.log
+```
