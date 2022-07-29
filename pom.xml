@@ -21,11 +21,12 @@
         <module>relative-path</module>
         <module>regex</module>
         <module>java8</module>
+        <module>seata</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
-        <interview-repository.version>1.5.0</interview-repository.version>
+        <interview-repository.version>1.6.0</interview-repository.version>
     </properties>
 
     <dependencies>
