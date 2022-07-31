@@ -4,9 +4,6 @@ top
 df
 chown -R user:usergroup dirctory
 
-// 查看指定端口进程
-lsof -i:端口号
-
 tar:
     - z 通过 gzip 指令处理备份文件。
     - x(extract) 从压缩文件中还原文件。
@@ -203,3 +200,107 @@ tail -n +5 xxx.log
 # top 交互式命令(详细查阅文档)
 ```
 
+#### lsof
+```shell
+# 无任何参数
+  lsof
+说明:
+  lsof 输出各列信息的意义如下:
+  COMMAND: 进程的名称
+  PID: 进程表示符
+  PPID: 父进程表示符(需要指定 -R 参数)
+  USER: 进程所有者
+  PGID: 进程所属组
+  FD: 文件描述符, 应用程序通过文件描述符识别该文件. 如 cwd、 txt 等.
+
+# 查看谁正在使用某个文件, 也就是说查找某个文件相关的进程
+  # 查找使用 bash 文件的进程
+  lsof /bin/bash
+  
+# 递归查看某个目录的文件信息
+  lsof test/test3
+说明:
+  使用了 +D, 对应目录下的所有子目录和文件都会被列出
+  
+# 不使用 +D 选项, 遍历查看某个目录的所有文件信息的方法
+  lsof | grep 'test/test3'
+  
+# 列出某个用户打开的文件信息
+  lsof -u username
+说明:
+  -u 选项, u 其实是 user 的缩写
+  
+# 列出某个程序进程所打开的文件信息
+  lsof -c mysql
+说明:
+  -c 选项将会列出所有以 mysql 这个进程开头的程序的文件, 其实你也可以写成 lsof | grep mysql, 但是第一种方法明显比第二种方法要少打几个字符了
+  
+# 列出多个进程多个打开的文件信息
+  lsof -c mysql -c apache
+  
+# 列出某个用户以及某个进程所打开的文件信息
+  lsof -u username -c mysql
+说明:
+  用户与进程可相关, 也可以不相关
+  
+# 列出除了某个用户外的被打开的文件信息
+  lsof -u ^root
+说明:
+  ^ 这个符号在用户名之前, 将会把是 root 用户打开的进程不让显示
+  
+# 通过某个进程号显示该进程打开的文件
+  lsof -p 1
+  
+# 列出多个进程号对应的文件信息
+  lsof -p 1, 2, 3
+  
+# 列出除了某个进程号, 其他进程号所打开的文件信息
+  lsof -p ^1
+  
+# 列出所有的网络连接
+  lsof -i
+  
+# 列出所有 tcp 网络连接信息
+  lsof -i tcp
+  
+# 列出所有 udp 网络连接信息
+  lsof -i udp
+  
+# 列出谁在使用某个端口
+  lsof -i:3306
+
+# 列出谁在使用某个特定的 udp 端口
+  lsof -i udp:55
+  
+# 列出谁在使用特定的 tcp 端口
+  lsof -i tcp:80
+
+# 列出某个用户的所有活跃的网络端口
+  lsof -a -u test -i
+  
+# 列出所有网络文件系统
+  lsof -N
+  
+# 域名 socket 文件
+  lsof -u
+  
+# 某个用户组所打开的文件信息
+  lsof -g 5555
+  
+# 根据文件描述列出对应的文件信息
+  lsof -d description(like 2)
+说明:
+  0 表示标准输入, 1 表述标准输出, 2 表示标准错误, 从而可知: 所以大多数应用程序所打开的文件的 FD 都是从 3 开始
+  
+# 根据文件描述范围列出文件信息
+  lsof -d 2-3
+  
+# 列出 COMMAND 列中包含字符创 " sshd", 且文件描述符的类型为 txt 的文件信息
+  lsof -c sshd -a -d txt
+  
+# 列出被进程号为 1234 的进程所打开的所有 IPV4 network files
+  lsof -i 4 -a -p 1234
+  
+# 列出目前连接主机 peida.linux 上端口为 20, 21, 22, 25, 53, 80 相关的所有文件信息, 且每隔 3 秒不断的执行 lsof 指令
+  lsof -i @peida.linux:20,21,22,25,53,80 -r 3
+```
