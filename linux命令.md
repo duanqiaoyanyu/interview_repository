@@ -1,8 +1,6 @@
 ps -ef
 ps -aux
-top
 df
-chown -R user:usergroup dirctory
 
 tar:
     - z 通过 gzip 指令处理备份文件。
@@ -304,3 +302,69 @@ tail -n +5 xxx.log
 # 列出目前连接主机 peida.linux 上端口为 20, 21, 22, 25, 53, 80 相关的所有文件信息, 且每隔 3 秒不断的执行 lsof 指令
   lsof -i @peida.linux:20,21,22,25,53,80 -r 3
 ```
+
+#### netstat
+```shell
+# 列出所有端口
+  netstat -a
+说明:
+  显示一个所有的有效连接信息列表, 包括已建立的连接(ESTABLISHED), 也包括监听连接请(LISTENING)的那些连接.
+  
+# 显示当前 UDP 连接状况
+  netstat -nu
+  
+# 显示 UDP 端口号的使用情况
+  netstat -apu
+  
+# 显示网卡列表
+  netstat -i
+  
+# 显示组播组的关系
+  netstat -g
+  
+# 显示网络统计信息
+  netstat -s
+说明:
+  按照各个协议分别显示其统计数据. 如果我们的应用程序(如 web 浏览器)运行速度比较慢, 或者不能显示 web 页之类的数据, 那么我们就可以用本选项来查看一下所显示的信息. 我们需要仔细查看统计数据的各行, 找到出错的关键字, 进而确定问题所在.
+
+# 显示监听的套接字
+  netstat -l
+  
+# 显示所有已建立的有效连接
+  netstat -n
+  
+# 显示关于以太网的统计数据
+  netstat -e
+说明:
+  用于显示关于以太网的统计数据. 它列出的项目包括传送的数据报的总字节数、错误数、删除数、数据报的数量和广播的数量. 这些统计数据既有发送的数据报的数量, 也有接收的数据报数量. 这个选项可以用来统计一些基本的网络流量)
+  
+# 显示关于路由表的信息
+  netstat -r
+
+# 列出所有 tcp 端口
+  netstat -at
+  
+# 统计机器中网络连接各个状态个数
+  netstat -a | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+  
+# 把状态全部取出来后使用 uniq -c 统计后再进行排序
+  netstat -nat | awk '{print $6}' | sort | uniq -c
+  
+# 查看连接某服务端口最多的 IP 地址
+  netstat -nat | grep "192.168.120.20:16067" | awk '{print $5}' | awk -F: '{print $4}' | sort | uniq -c | sort -nr | head -20
+  
+# 找出程序运行的端口
+  netstat -ap | grep ssh
+  
+# 在 netstat 输出中显示 PID 和进程名称
+  netstat -pt
+说明:
+  netstat -p 可以与其他开关一起使用, 就可以添加 "PID/进程名称" 到 netstat 输出中, 这样 debugging 的时候可以很方便的发现特定端口运行的程序
+
+# 找出运行在指定端口的进程
+  netstat -anpt | grep ':16064'
+
+说明:
+  运行在端口 16064 的进程 id 为 24596, 再通过 ps 命令就可以找到具体的应用程序了.
+```
+
