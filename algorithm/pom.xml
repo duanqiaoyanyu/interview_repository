@@ -10,33 +10,17 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>seata</artifactId>
+    <artifactId>algorithm</artifactId>
     <version>${interview-repository.version}</version>
-    <name>seata</name>
-    <description>seata</description>
+    <packaging>jar</packaging>
+    <name>algorithm</name>
+    <description>algorithm</description>
+
     <properties>
         <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
-
-        <dependency>
-            <groupId>io.seata</groupId>
-            <artifactId>seata-spring-boot-starter</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
-            <version>2021.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.seata</groupId>
-                    <artifactId>seata-spring-boot-starter</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
     </dependencies>
 
     <build>
