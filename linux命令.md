@@ -369,3 +369,12 @@ tail -n +5 xxx.log
 ```
 
 #### date
+```shell
+# 显示当前时间
+  date 
+  date'+%c'
+  date'+%D'
+  date'+%x'
+  date+'%T'
+  date+'%X'
+```
