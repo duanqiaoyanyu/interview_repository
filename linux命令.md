@@ -377,4 +377,57 @@ tail -n +5 xxx.log
   date'+%x'
   date+'%T'
   date+'%X'
+  
+# 取当前时间(精确到秒)
+  date '+%Y%m%d%H%M%S'
+```
+
+#### grep
+```shell
+# 查找指定进程
+  ps -ef | grep svn
+说明:
+  第一条记录是查找出的进程; 第二条结果是 grep 进程本身, 并非真正要找的进程.
+  
+# 查找指定进程个数
+  ps -ef | grep svn -c
+  ps -ef | grep -c svn
+  
+# 从文件中读取关键词进行搜索
+  cat test.txt | grep -f test2.txt
+说明:
+  输出 test.txt 文件中含有从 test2.txt 文件中读取出的关键词的内容行. 简单的理解就是
+  从 test.txt 中过滤出包含了 test2.txt文件中内容的 内容
+  
+# 从文件中读取关键词进行搜索 且显示行号
+  cat test.txt | grep -nf test2.txt
+说明:
+  输出 test.txt 文件中含有从 test2.txt 文件中读取出的关键词的内容行, 并显示每一行的行号
+
+# 从文件中查找关键词
+  grep 'linux' test.txt
+  
+# 从多个文件中查找关键词
+  grep 'linux' test.txt test2.txt
+说明:
+  多文件时, 输出查询到的信息内容时, 会把文件的命名在行最前面输出并且加上 ":" 作为标识符
+  
+# grep 不显示本身进程
+  ps aux | grep \[s]sh
+  ps aux | grep ssh | grep -v "grep"
+  
+# 找出 以 u 开头的行内容
+  cat test.txt | grep ^u
+  
+# 输出非 u 开头的行内容
+  cat test.txt | grep ^[^u]
+  
+# 输出以 hat 结尾的行内容
+  cat test.txt | grep hat$
+  
+# 显示包含 ed 或者 at 字符的内容行
+  cat test.txt | grep -E "ed|at"
+  
+# 显示当前目录下面以 .txt 结尾的文件中的所有包含每个字符串至少有 7 个连续小写字符的字符串的行
+  grep '[a-z]\{7\}' *.txt
 ```
