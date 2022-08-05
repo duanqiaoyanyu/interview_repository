@@ -22,6 +22,8 @@
         <module>regex</module>
         <module>java8</module>
         <module>seata</module>
+        <module>thread</module>
+        <module>algorithm</module>
     </modules>
 
     <properties>
