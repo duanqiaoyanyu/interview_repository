@@ -1,5 +1,4 @@
-ps -ef
-ps -aux
+
 df
 
 tar:
@@ -430,4 +429,38 @@ tail -n +5 xxx.log
   
 # 显示当前目录下面以 .txt 结尾的文件中的所有包含每个字符串至少有 7 个连续小写字符的字符串的行
   grep '[a-z]\{7\}' *.txt
+```
+
+#### ps
+```shell
+# 显示所有进程信息
+  ps -A
+  
+# 显示指定用户信息
+  ps -u root
+# 显示所有进程信息, 连同命令行
+  ps -ef
+  
+# ps 与 grep 常用组合写法, 查找特定进程
+  ps -ef | grep ssh
+  
+# 将目前属于您自己这次登录的 PID 与相关信息列示出来
+  ps -l
+  
+# 列出目前所有的正在内存当中的程序
+  ps aux
+
+# 列出类似程序树的程序显示
+  ps -axjf
+  
+# 找出与 cron 与 syslog 这两个服务有关的 PID 号码
+  ps aux | egrep '(cron|syslog)'
+说明:
+其他实例:
+1. 可以用 | 管道和 more 连接起来分页查看
+  ps -aux | more
+2. 把所有进程显示出来, 并输出到 ps001.txt 文件
+  ps -aux > ps001.txt
+3. 输出指定的字段
+  ps -o pid,ppid,pgrp,session,tpgid,comm
 ```
