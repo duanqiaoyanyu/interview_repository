@@ -21,15 +21,52 @@
 
 df
 
-tar:
-    - z 通过 gzip 指令处理备份文件。
-    - x(extract) 从压缩文件中还原文件。
-    - c(create) 建立新的压缩文件
-    - v(verbose) 显示指令执行过程
-    - f(file) 压缩文件
-    - C 目的目录
+#### tar
+```shell
+# tar usage and options
+  c - create an archive file
+  C - specified directory
+  x - extract an archive file
+  v - verbosely show the progress of the archive file
+  f - filename of the archive file
+  t - viewing the content of the archive file
+  z - filter archive through gzip
+  
+# 将文件全部打包成 tar 包
+  # 仅打包, 不压缩!
+  tar -cvf log.tar log2012.log
+  # 打包后, 以 gzip 压缩
+  tar -zcvf log.tar.gz log2012.log
+  # 打包后, 以 bzip2 压缩
+  tar -jcvf log.tar.bz2 log2012.log
+在参数 f 之后的文件名是自己取的, 我们习惯上都以 .tar 来作为辨识. 如果加 z 参数, 则以 .tar.gz 或 .tgz 来代表 gzip 压缩过的 tar 包; 如果加 j 参数, 则以 .tar.bz2 来作为 tar 包名.
 
-
+# 查阅上述 tar 包内有那些文件
+  tar -ztvf log.tar.gz
+说明:
+  由于我们使用 gzip 压缩的 log.tar.gz, 所以要查阅 log.tar.gz 包内的文件时, 就得要加上 z 这个参数了.
+  
+# 将 tar 包解压缩
+  tar -zxvf /opt/soft/test/log.tar.gz
+说明:
+  在预设的情况下, 我们可以将压缩文件在任何地方解开的
+  
+# 只将 /tar 内的部分文件解压出来
+  tar -zxvf /opt/soft/log30.tar.gz log2013.log
+说明:
+  我们可以通过 tar -ztvf 来查阅 tar 包内的文件名称, 如果单只要一个文件, 就可以通过这个方式来解压部分文件
+  
+# 文件备份下来, 并且保存其权限
+  tar -zcvpf log31.tar.gz log2014.log log2015.log log2016.log
+说明:
+  这个 -p 的属性是很重要的, 尤其是当您要保留原本文件的属性时.
+  
+# 在 文件夹当中, 比某个日期新的文件才备份
+  tar -N "2012/11/13" -zcvf log17.tar.gz test
+  
+# 备份文件夹内容时排除部分文件
+  tar --exclude scf/service -zcvf scf.tar.gz scf/*
+```
 
 vim 取消高亮
 命令行模式下
