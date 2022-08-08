@@ -21,6 +21,56 @@
 
 df
 
+#### mv
+```shell
+# 文件改名
+  mv test.log test1.txt
+说明:
+  将文件 test.log 重命名为 test1.txt
+  
+# 移动文件
+  mv test1.txt test3
+说明:
+  将 test1.txt 文件移动到目录 test3 中
+
+# 将文件 log1.txt, log2.txt, log3.txt 移动到目录 test3 中
+  mv log1.txt log2.txt log3.txt test3
+  mv -t /opt/soft/test/test4/ log1.txt log2.txt log3.txt
+说明:
+  mv log1.txt log2.txt log3.txt test3 命令把 log1.txt log2.txt log3.txt 三个文件移到 test3 目录中去,
+  mv -t /opt/soft/test/test4/ log1.txt log2.txt log3.txt 命令又将三个文件移动到 test4 目录中去
+
+# 将文件 file1 改名为 file2, 如果 file2 已经存在, 则询问是否覆盖
+  mv -i log1.txt log2.txt
+  
+# 将文件 file1 改名为 file2, 即使 file2 存在, 也是直接覆盖掉
+  mv -f log3.txt log2.txt
+说明:
+log3.txt 的内容直接覆盖了 log2.txt 内容, -f 这是个危险的选项, 使用的时候一定要保持头脑清晰, 一般情况下最好不用加上它.
+
+# 目录的移动
+  mv dir1 dir2
+说明:
+  如果目录 dir2 不存在, 将目录 dir1 改名为 dir2; 否则, 将 dir1 移动到 dir2 中
+  
+# 移动当前文件夹下的所有文件到上一级目录
+  mv * ../
+  
+# 把当前目录的一个子目录里的文件移动到另一个子目录里
+  mv test3/*.txt test5
+  
+# 文件被覆盖前做简单备份, 前面加参数 -b
+  mv log1.txt -b log2.txt
+说明:
+-b 不接受参数, mv会去读取环境变量VERSION_CONTROL来作为备份策略.
+--backup该选项指定如果目标文件存在时的动作, 共有四种备份策略:
+1.CONTROL=none或off : 不备份.
+2.CONTROL=numbered或t:数字编号的备份
+3.CONTROL=existing或nil:如果存在以数字编号的备份, 则继续编号备份m+1...n:
+执行mv操作前已存在以数字编号的文件log2.txt.~1~, 那么再次执行将产生log2.txt~2~, 以次类推. 如果之前没有以数字编号的文件, 则使用下面讲到的简单备份.
+4.CONTROL=simple或never:使用简单备份:在被覆盖前进行了简单备份, 简单备份只能有一份, 再次被覆盖时, 简单备份也会被覆盖.
+```
+
 #### tar
 ```shell
 # tar usage and options
