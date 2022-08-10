@@ -21,6 +21,26 @@
 
 df
 
+#### mkdir
+```shell
+# 创建一个空目录
+  mkdir test1
+  
+# 递归创建多个目录
+  mkdir -p test2/test22
+
+# 创建权限为 777 的目录
+  mkdir -m 777 test3
+说明:
+test3 的权限为 rwxrwxrwx
+
+# 创建新目录都显示信息
+  mkdir -v test4
+
+# 一个命令创建项目的目录结构
+  mkdir -vp scf/{lib/, bin/, doc/{info, product}, logs/{info, product}, service/deploy/{info, product}}
+```
+
 #### mv
 ```shell
 # 文件改名
