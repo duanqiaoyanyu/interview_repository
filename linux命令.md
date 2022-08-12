@@ -81,6 +81,29 @@ test3 的权限为 rwxrwxrwx
   mkdir -vp scf/{lib/, bin/, doc/{info, product}, logs/{info, product}, service/deploy/{info, product}}
 ```
 
+#### rm
+```shell
+# 删除文件 file, 系统会先询问是否删除
+  rm 文件名
+说明:
+  输入 rm log.log 命令后, 系统会询问是否删除, 输入 y 后就会删除文件, 不想删除则输入 n
+
+# 强行删除 file, 系统不再提示
+  rm -r log1.log
+  
+# 删除任何 .log 文件; 删除前逐一询问确认
+  rm -i *.log
+
+# 将 test1 子目录及子目录中的所有文件删除
+  rm -r test1
+  
+# rm -rf test2 命令会将 test2 子目录及子目录中所有档案删除, 并且不用一一确认
+  rm -rf test2
+ 
+# 删除以 -f 开头的文件
+  rm -- -f
+```
+
 #### mv
 ```shell
 # 文件改名
