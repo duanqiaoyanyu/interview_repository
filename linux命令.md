@@ -177,6 +177,25 @@ log3.txt 的内容直接覆盖了 log2.txt 内容, -f 这是个危险的选项, 
   那个 log_link.log 是由 -s 的参数造成的, 建立的是一个『快捷方式』, 所以会看到在文件的最右边, 会显示这个文件是『链接』到哪里去的
 ```
 
+#### cat
+```shell
+# 把 log2012.log 的文件内容加上行号后输入 log2013.log 这个文件里
+  cat -n log2012.log log2013.log
+
+# 把 log2012.log 和 log2013.log 的文件内容加上行号(空白行不加) 之后将内容附加到 log.log 里
+  cat -b log2012.log log2013.log log.log
+
+# 把 log2012.log 的文件内容加上行号输入到 log.log 这个文件
+  cat -n log2012.log > log.log
+  
+备注:
+tac (反向列示)
+命令:
+  tac log.txt
+说明:
+  tac 是将 cat 反写过来, 所以他的功能就跟 cat 相反, cat 是由第一行到最后一行连续显示在荧幕上, 而 tac 则是由最后一行到第一行反向在荧幕上显示出来!.
+```
+
 #### tar
 ```shell
 # tar usage and options
