@@ -24,6 +24,7 @@
         <module>seata</module>
         <module>thread</module>
         <module>algorithm</module>
+        <module>concurrent</module>
     </modules>
 
     <properties>
