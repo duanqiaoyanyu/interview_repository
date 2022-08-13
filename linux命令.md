@@ -1,15 +1,228 @@
 
+### Linux 目录结构
+| 目录 |       应放置档案内容        |
+| :---- |:--------------------:|
+| /bin | 放置在单人维护模式下还能够被操作的指令  |
+| /boot | 放置开机会使用到的档案 |
+| /dev | 任何装置与周边设备都是以档案的形态存在于这个目录中 |
+| /etc | 系统主要的设定档几乎都放置在这个目录内 |
+ | /home | 使用者家目录, 预设的使用者家目录都规范到这里来。家目录还有一种代号:~ |
+| /lib | 放置核心相关的模组(驱动程式) |
+| /media | 放置可移除的装置. 包括软碟、DVD等 |
+| /mnt | 暂时挂载某些额外的装置 |
+| /opt | 第三方协议软体放置的目录 |
+| /root | 系统管理员 (root) 的家目录 |
+| /sbin | 开机过程中所需要的, 包括开机、修复、还原系统所需要的指令 |
+| /srv | 一些网络服务启动之后, 这些服务所需要取用的资料目录 |
+| /tmp | 一般使用者或者是正在执行的程序暂时放置档案的地方 |
+| /lost + foumd | 档案系统发生错误时, 将一些遗失的片段放置到这个目录下 |
+| /proc | 虚拟文件系统 |
+| /sys | 类似 /proc 记录与核心相关的咨询 |
+
 df
 
-tar:
-    - z 通过 gzip 指令处理备份文件。
-    - x(extract) 从压缩文件中还原文件。
-    - c(create) 建立新的压缩文件
-    - v(verbose) 显示指令执行过程
-    - f(file) 压缩文件
-    - C 目的目录
+#### ls
+```shell
+# 列出 /home/peidachang 文件夹下的所有文件和目录的详细资料
+  ls -l -R /home/peidachang
+在使用 ls 命令时要注意命令的格式: 在命令提示符后, 首先是命令的关键字, 接下来是命令参数, 在命令参数之前要有 - 短横线 "-",所有的命令参数都有特定的作用, 自己可以根据需要选用一个或者多个参数, 在命令参数的后面是命令的操作对象. 在以上这条命令 "ls -l -R /home/peidachang" 中, "ls" 是命令关键字, "-l -R" 是参数, "/home/peidachang" 是命令的操作对象. 在这条命令中, 使用到了两个参数, 分别为 "l" 和 "R", 当然, 你也可以把他们放在一起使用, 如下所示:
+  ls -lR /home/peidachang
+  这种形式和上面的命令形式执行的结果是完全一样的. 另外, 如果命令的操作对象位于当前目录中, 可以直接对操作对象进行操作, 如果不在当前目录则需要给出操作对象的完整路径, 例如上面的例子中, 我的当前文件夹是 peidachang 文件夹, 我想对 home 文件夹下的 peidachang 文件进行操作, 我可以直接输入 ls -lR peidachang, 也可以使用 ls -lR /home/peidachang
+  
+# 列出当前目录中所有以 "t" 开头的文件的详细内容, 可以使用如下命令:
+  ls -l t*
+可以查看当前目录下文件名以 "t" 开头的所有文件的信息. 其实, 在命令格式中, 方括号内的内容都是可以省略的, 对于命令 ls 而言, 如果省略命令参数和操作对象, 直接输入 "ls", 则将会列出当前工作目录的内容清单.
 
+# 只列出文件下的子目录
+  # 列出 /opt/soft 文件下面的子目录
+  ls -F /opt/soft | grep /$
 
+  # 列出 /opt/soft 文件下面的子目录详细情况
+  ls -l /opt/soft | grep "^d"
+
+# 列出目前工作目录下所有名称是 s 开头的文件, 越新的排越后面, 可以使用如下命令
+  ls -lrt s*
+  
+# 列出目前工作目录下所有档案及目录: 目录于名称后加 "/", 可执行档于名称后加 "*"
+  ls -AF
+  
+# 计算当前目录下的文件数和目录数
+  ls -l * | grep "^-" | wc -l 文件个数
+  ls -l * | grep "^d" | wc -l 目录个数
+  
+# 在 ls 中列出文件的绝对路径
+  ls | sed "s:^:`pwd`/:"
+
+# 列出当前目录下的所有文件(包括隐藏文件)的绝对路径, 对目录不做递归
+  find $PWD -maxdepth 1 | xargs ls -ld
+  
+# 指定文件时间输出格式
+  ls -lt --time-style=full-iso
+  ls -clt --time-style=long-iso
+```
+
+#### mkdir
+```shell
+# 创建一个空目录
+  mkdir test1
+  
+# 递归创建多个目录
+  mkdir -p test2/test22
+
+# 创建权限为 777 的目录
+  mkdir -m 777 test3
+说明:
+test3 的权限为 rwxrwxrwx
+
+# 创建新目录都显示信息
+  mkdir -v test4
+
+# 一个命令创建项目的目录结构
+  mkdir -vp scf/{lib/, bin/, doc/{info, product}, logs/{info, product}, service/deploy/{info, product}}
+```
+
+#### rm
+```shell
+# 删除文件 file, 系统会先询问是否删除
+  rm 文件名
+说明:
+  输入 rm log.log 命令后, 系统会询问是否删除, 输入 y 后就会删除文件, 不想删除则输入 n
+
+# 强行删除 file, 系统不再提示
+  rm -r log1.log
+  
+# 删除任何 .log 文件; 删除前逐一询问确认
+  rm -i *.log
+
+# 将 test1 子目录及子目录中的所有文件删除
+  rm -r test1
+  
+# rm -rf test2 命令会将 test2 子目录及子目录中所有档案删除, 并且不用一一确认
+  rm -rf test2
+ 
+# 删除以 -f 开头的文件
+  rm -- -f
+```
+
+#### mv
+```shell
+# 文件改名
+  mv test.log test1.txt
+说明:
+  将文件 test.log 重命名为 test1.txt
+  
+# 移动文件
+  mv test1.txt test3
+说明:
+  将 test1.txt 文件移动到目录 test3 中
+
+# 将文件 log1.txt, log2.txt, log3.txt 移动到目录 test3 中
+  mv log1.txt log2.txt log3.txt test3
+  mv -t /opt/soft/test/test4/ log1.txt log2.txt log3.txt
+说明:
+  mv log1.txt log2.txt log3.txt test3 命令把 log1.txt log2.txt log3.txt 三个文件移到 test3 目录中去,
+  mv -t /opt/soft/test/test4/ log1.txt log2.txt log3.txt 命令又将三个文件移动到 test4 目录中去
+
+# 将文件 file1 改名为 file2, 如果 file2 已经存在, 则询问是否覆盖
+  mv -i log1.txt log2.txt
+  
+# 将文件 file1 改名为 file2, 即使 file2 存在, 也是直接覆盖掉
+  mv -f log3.txt log2.txt
+说明:
+log3.txt 的内容直接覆盖了 log2.txt 内容, -f 这是个危险的选项, 使用的时候一定要保持头脑清晰, 一般情况下最好不用加上它.
+
+# 目录的移动
+  mv dir1 dir2
+说明:
+  如果目录 dir2 不存在, 将目录 dir1 改名为 dir2; 否则, 将 dir1 移动到 dir2 中
+  
+# 移动当前文件夹下的所有文件到上一级目录
+  mv * ../
+  
+# 把当前目录的一个子目录里的文件移动到另一个子目录里
+  mv test3/*.txt test5
+  
+# 文件被覆盖前做简单备份, 前面加参数 -b
+  mv log1.txt -b log2.txt
+说明:
+-b 不接受参数, mv会去读取环境变量VERSION_CONTROL来作为备份策略.
+--backup该选项指定如果目标文件存在时的动作, 共有四种备份策略:
+1.CONTROL=none或off : 不备份.
+2.CONTROL=numbered或t:数字编号的备份
+3.CONTROL=existing或nil:如果存在以数字编号的备份, 则继续编号备份m+1...n:
+执行mv操作前已存在以数字编号的文件log2.txt.~1~, 那么再次执行将产生log2.txt~2~, 以次类推. 如果之前没有以数字编号的文件, 则使用下面讲到的简单备份.
+4.CONTROL=simple或never:使用简单备份:在被覆盖前进行了简单备份, 简单备份只能有一份, 再次被覆盖时, 简单备份也会被覆盖.
+```
+
+#### cp
+```shell
+# 复制单个文件到目标目录, 文件在目标文件夹中不存在
+  cp log.log test5
+说明:
+  在没有带 -a 参数是, 两个文件的时间是不一样的. 在带了 -a 参数时, 两个文件的时间是一致的.
+
+# 目标文件存在时, 会询问是否覆盖
+  cp log.log test5
+说明:
+  目标文件存在时, 会询问是否覆盖. 这是因为 cp 是 cp -i 的别名. 目标文件存在时, 即使加了 -f 标志, 也还会询问是否覆盖.
+  
+# 复制整个目录
+  cp -a test3 test5
+说明:
+  注意目标目录存在与否结果是不一样的. 目标目录存在时, 整个源目录被复制到目标目录里.
+  
+# 复制的 log.log 简历一个链接档 log_link.log
+  cp -s log.log log_link.log
+说明:
+  那个 log_link.log 是由 -s 的参数造成的, 建立的是一个『快捷方式』, 所以会看到在文件的最右边, 会显示这个文件是『链接』到哪里去的
+```
+
+#### tar
+```shell
+# tar usage and options
+  c - create an archive file
+  C - specified directory
+  x - extract an archive file
+  v - verbosely show the progress of the archive file
+  f - filename of the archive file
+  t - viewing the content of the archive file
+  z - filter archive through gzip
+  
+# 将文件全部打包成 tar 包
+  # 仅打包, 不压缩!
+  tar -cvf log.tar log2012.log
+  # 打包后, 以 gzip 压缩
+  tar -zcvf log.tar.gz log2012.log
+  # 打包后, 以 bzip2 压缩
+  tar -jcvf log.tar.bz2 log2012.log
+在参数 f 之后的文件名是自己取的, 我们习惯上都以 .tar 来作为辨识. 如果加 z 参数, 则以 .tar.gz 或 .tgz 来代表 gzip 压缩过的 tar 包; 如果加 j 参数, 则以 .tar.bz2 来作为 tar 包名.
+
+# 查阅上述 tar 包内有那些文件
+  tar -ztvf log.tar.gz
+说明:
+  由于我们使用 gzip 压缩的 log.tar.gz, 所以要查阅 log.tar.gz 包内的文件时, 就得要加上 z 这个参数了.
+  
+# 将 tar 包解压缩
+  tar -zxvf /opt/soft/test/log.tar.gz
+说明:
+  在预设的情况下, 我们可以将压缩文件在任何地方解开的
+  
+# 只将 /tar 内的部分文件解压出来
+  tar -zxvf /opt/soft/log30.tar.gz log2013.log
+说明:
+  我们可以通过 tar -ztvf 来查阅 tar 包内的文件名称, 如果单只要一个文件, 就可以通过这个方式来解压部分文件
+  
+# 文件备份下来, 并且保存其权限
+  tar -zcvpf log31.tar.gz log2014.log log2015.log log2016.log
+说明:
+  这个 -p 的属性是很重要的, 尤其是当您要保留原本文件的属性时.
+  
+# 在 文件夹当中, 比某个日期新的文件才备份
+  tar -N "2012/11/13" -zcvf log17.tar.gz test
+  
+# 备份文件夹内容时排除部分文件
+  tar --exclude scf/service -zcvf scf.tar.gz scf/*
+```
 
 vim 取消高亮
 命令行模式下
