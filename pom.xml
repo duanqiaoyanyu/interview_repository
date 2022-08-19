@@ -29,7 +29,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <interview-repository.version>1.8.0</interview-repository.version>
+        <interview-repository.version>1.9.0</interview-repository.version>
     </properties>
 
     <dependencies>
