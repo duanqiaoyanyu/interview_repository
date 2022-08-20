@@ -25,6 +25,7 @@
         <module>thread</module>
         <module>algorithm</module>
         <module>concurrent</module>
+        <module>spring-cloud-stream</module>
     </modules>
 
     <properties>
