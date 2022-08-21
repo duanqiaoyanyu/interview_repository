@@ -98,5 +98,12 @@ spring:
             consumer:
               max-concurrency: 10
               autoBindDlq: true
+              republishToDlq: true    
+          # 监管数据上传
+          regulatoryDataPushInput:
+            consumer:
+              delayedExchange: true
+              max-concurrency: 10
+              autoBindDlq: true
               republishToDlq: true
 ```
