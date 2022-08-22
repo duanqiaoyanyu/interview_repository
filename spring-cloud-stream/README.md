@@ -107,3 +107,62 @@ spring:
               autoBindDlq: true
               republishToDlq: true
 ```
+
+### 实战
+spring cloud stream 3.x 和 spring cloud 2.x 版本改动还是比较大的, 废弃了很多东西。然后也引入了很多新的类, 3.x 主要的变动在于是希望多运用函数式编程, 整个基本是基于 `java8` 的 `FunctionInterface` 来做的, 通过函数式的接口来定义 `binding`, 常用的三个函数式接口 `Supplier`、`Function`、`Consumer`. 简单说一下三者的用处
+
+- `Supplier` 通过 supplier 函数式定义的 `binding` 会源源不断的自动产生消息. 实际生产我们都是程序主动发送消息, 而不是自动产生, 所以我目前觉得用处不是很大.
+- `Function` 通过 function 函数式定义会同时定义两个 `binding` 一个输入的, 一个输出的。其实 `Function` 就是用来做一些中转操作的, 很像 2.x 中的 `Processor`, 实际用处场景也很少.
+- `Consumer` 通过 consumer 函数式定义的相当于一个输入 `binding`, 也是我们最常用的, 在我们定义的 `Consumer` 中的方法就是我们的 MQ 消费逻辑.
+
+
+```yaml
+spring:
+  cloud:
+    function:
+      # 函数声明
+      definition: supplierName;functionName;consumerName
+      
+    stream:
+      bindings:
+        # 函数式定义
+        
+        # 输出为 out
+        supplierName-out-0: 
+          destination: 111Topic
+          content-type: application/json
+          
+        # 输入为 in
+        functionName-in-0:
+          destination: 111Topic
+          content-type: application/json
+            
+        functionName-out-0:
+          destination: 222Topic
+          content-type: application/json
+          
+        consumerName-in-0:
+          destination: 222Topic
+          content-type: application/json
+        
+```
+观察上面的配置大家发现什么规律了没? 首先如果是通过函数式来定义 `binding` 需要先声明函数定义, 如果有多个函数需要定义, 函数与函数之间通过 ";"(分号)进行分隔. 然后就是下面的具体的 `binding` 名字, 如果是输出通道则是 `beanName-out-0`, 最后面那个 0 现在暂时可以认为是死的, 目前用不到. 如果是输入通道则是 `beanName-in-0`, 这就是通过函数式定义 `binding` 的方法. 通过函数式的定义通常是我们在定义输入 `binding` 时常用的.
+
+由于我们消息是在程序中主动发送的, 所以我们需要直接定义输出 `binding`, 不通过函数式来定义.
+```yaml
+spring:
+  cloud:
+    function:
+      definition: supplierName;functionName;consumerName
+      
+    stream:
+      bindings:
+        # 直接定义(注意不要定义成函数式格式)
+        cskaoyanOutput:
+          destination: 333Topic
+          content-type: application/json
+```
+这里我们的 `binding` 的名字可以自己随便取, 结合业务自定义即可. 不过有一点需要注意的是, 我们自定义的名字不能定义成函数式的格式, 也就是说不能定义成如下格式 `xxx-out-0`, 因为你一旦定义成这种格式, 框架就认为你这是通过函数式方式来定义, 他就会去上面的函数声明中找有没有对应的声明, 并且还会去 spring 容器中去关联相应的 bean, 如果找不到就会报错. 所以说, 自定义函数名就不能定义成函数式格式的名字.
+
+#### 其他配置
+剩余的配置就是一些和生产者、消费者、队列有关的配置项了, 这些后续慢慢补充. 业务中用到了再去了解也可.
