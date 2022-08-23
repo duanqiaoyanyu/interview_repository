@@ -164,5 +164,65 @@ spring:
 ```
 这里我们的 `binding` 的名字可以自己随便取, 结合业务自定义即可. 不过有一点需要注意的是, 我们自定义的名字不能定义成函数式的格式, 也就是说不能定义成如下格式 `xxx-out-0`, 因为你一旦定义成这种格式, 框架就认为你这是通过函数式方式来定义, 他就会去上面的函数声明中找有没有对应的声明, 并且还会去 spring 容器中去关联相应的 bean, 如果找不到就会报错. 所以说, 自定义函数名就不能定义成函数式格式的名字.
 
+
+#### 生产者代码
+```java
+/**
+ * 某某业务消息发送者
+ * 
+ */
+@Slf4j
+@Component
+public class BusinessSender {
+
+    /**
+     * binding 名称, 对应于配置文件中的 "cskaoyanOutput"
+     */
+    private static final String BINDING_NAME = "cskaoyanOutput";
+    
+    @Autowired
+    private StreamBridge streamBridge;
+
+    /**
+     * 发送消息
+     * 
+     * @param model
+     */
+    public void send(BusinessModel model) {
+        log.info("发送 [某某业务消息]... 成功, model: {}", model);
+        Message<BusinessModel> message = MessageBuilder.withPayload(model).build();
+        streamBridge.send(BINDING_NAME, message);
+    }
+}
+```
+
+#### 消费者代码
+```java
+/**
+ * 某某业务消息处理器
+ * 
+ */
+@Slf4j
+@Configuration
+public class BusinessHandler {
+    
+    @Autowired
+    private BusinessService businessService;
+
+    /**
+     * 注意这里的 beanName 要与配置文件中的函数声明一致, 如果不手动给 bean 命名, 取的则是方法名.
+     * 
+     * @return
+     */
+    @Bean
+    Consumer<BusinessModel> consumerName() {
+        return model -> {
+            log.info("收到 [某某业务消息]... 成功, model: {}", model);
+            businessService.handle(model);
+        };
+    }
+}
+```
+
 #### 其他配置
 剩余的配置就是一些和生产者、消费者、队列有关的配置项了, 这些后续慢慢补充. 业务中用到了再去了解也可.
