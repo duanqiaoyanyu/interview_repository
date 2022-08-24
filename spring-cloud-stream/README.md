@@ -41,23 +41,27 @@ spring:
   cloud:
     stream:
       binders:
+        # binder 名字
         rabbit:
+          # binder 类型 (rabbit|kafka|rocketmq)
           type: rabbit
-          
+      # 默认 binder
+      default-binder: rabbit
+
       # 下面是对所有队列都生效的配置, 不区分 binder
       default:
+        content-type: application/json
+        group: ${spring.application.name}
         consumer:
           concurrency: 3 # 初始/最少/空闲时 消费者数量。默认1
-          
-      # 下面是 binder 为 rabbitmq 的所有队列都应用的默认配置, 若某个队列需要覆盖, 直接在对应的配置文件中覆盖对应的配置即可
+
       rabbit:
-        bindings:
-          default:
-            consumer:
-              max-concurrency: 10 # queue的消费者的最大数量。当前消费者数量不足以及时消费消息时, 会动态增加消费者数量, 直到到达最大数量, 即该配置的值.
-              autoBindDlq: true # 是否自动声明死信队列（DLQ）并将其绑定到死信交换机（DLX）。默认是false。
-              republishToDlq: true # (如果定义了DLQ，当消费失败的消息重试次数耗尽后，会将消息路由到该DLQ。) 当为true时，死信队列接收到的消息的headers会更加丰富，多了异常信息和堆栈跟踪。默认false。
-              republishDeliveryMode: DeliveryMode.PERSISTENT # 默认DeliveryMode.PERSISTENT（持久化）。当republishToDlq为true时，转发的消息的delivery mode
+        # 下面是 binder-type 为 rabbit 的所有队列都应用的默认配置, 若某个队列需要覆盖, 直接在对应的配置文件中覆盖对应的配置即可
+        default:
+          consumer:
+            max-concurrency: 10 # queue的消费者的最大数量。当前消费者数量不足以及时消费消息时, 会动态增加消费者数量, 直到到达最大数量, 即该配置的值.
+            autoBindDlq: true # 是否自动声明死信队列（DLQ）并将其绑定到死信交换机（DLX）。默认是false。
+            republishToDlq: true # (如果定义了DLQ，当消费失败的消息重试次数耗尽后，会将消息路由到该DLQ。) 当为true时，死信队列接收到的消息的headers会更加丰富，多了异常信息和堆栈跟踪。默认false。
 ```
 
 ```yaml
