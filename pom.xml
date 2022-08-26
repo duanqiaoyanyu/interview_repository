@@ -25,6 +25,7 @@
         <module>thread</module>
         <module>algorithm</module>
         <module>concurrent</module>
+        <module>spring-cloud-stream</module>
     </modules>
 
     <properties>
@@ -48,6 +49,12 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.8.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
         </dependency>
     </dependencies>
 
