@@ -1,0 +1,26 @@
+spring:
+  cloud:
+    function:
+      definition: supplierName;functionName;consumerName
+
+    stream:
+      bindings:
+        supplierName-out-0:
+          destination: 111Topic
+          content-type: application/json
+
+        functionName-in-0:
+          destination: 111Topic
+          content-type: application/json
+
+        functionName-out-0:
+          destination: 222Topic
+          content-type: application/json
+
+        consumerName-in-0:
+          destination: 222Topic
+          content-type: application/json
+
+        cskaoyanOutput:
+          destination: 333Topic
+          content-type: application/json
