@@ -33,3 +33,25 @@ GitFlow 流程
 - https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 - https://github.com/firstcontributions/first-contributions/tree/master/additional-material/git_workflow_scenarios
 - 
+
+
+
+
+#### git revert
+可以把某个 commit 的变更, 透过『相反』的步骤把变更给还原.
+操作流程
+1. git revert commitId
+2. 有没有冲突, 如果有冲突解决冲突
+3. git commit 建立一个新版本提交
+
+**使用 git revert 命令套用变更, 但不执行 commit 动作
+使用 git revert 时, 预设若执行成功, 会直接建立一个 commit 版本, 如果你希望在执行 git revert 之后先保留变更的内容, 也许再添加一些档案或修改一些内容, 然后再资兴签入的话, 可以使用以下步骤.
+1. git revert -n commitId
+2. 这个时候, 索引状态已经被更新, 但你还是可以继续修改这个版本, 直到你想完成本次动作. 这时你有两个执行的选项
+   - git revert --continue 代表你已经完成所有操作, 并且建立一个新版本, 就跟执行 git commit 一样
+   - git revert --abort 代表你准备放弃这次复原的动作, 执行这个命令会让所有变更状态还原, 也就是删除的档案又会被加回来.
+
+> 请注意: 当 git revert -n 执行完后, 并不是用 git commit 建立版本喔!
+
+小结:
+今天介绍的『还原』版本的机制, 其实是透过『新增一个版本』的方式把变更的内容改回来, 而且透过这种方式, 你可以透过版本历史记录中明确找出你到底时针对哪几个版本进行还原的. 另外就是这个『还原』的过程, 其实跟『合并』的过程非常类似, 发生冲突时的解决方法也都如出一辙.
