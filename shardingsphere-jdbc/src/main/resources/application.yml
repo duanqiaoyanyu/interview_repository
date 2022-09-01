@@ -1,0 +1,29 @@
+spring:
+  shardingsphere:
+    mode:
+      # 运行模式类型
+      type: Memory
+
+    datasource:
+      # 真实数据源名称, 多个数据源用逗号分隔
+      names: ds1,ds2
+
+    # 配置数据源
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/ds1
+        username: root
+        password:
+
+      ds2:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/ds2
+        username: root
+        password:
+
+
+
+
+
