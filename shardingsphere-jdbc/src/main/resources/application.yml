@@ -23,7 +23,100 @@ spring:
         username: root
         password:
 
+    rules:
+      sharding:
+        # 默认数据库分片策略
+        default-database-strategy:
+          standard:
+            sharding-column:
+            sharding-algorithm-name:
 
+        # 默认表分片策略
+        default-table-strategy:
+          standard:
+            sharding-column:
+            sharding-algorithm-name:
 
+        # 默认分布式序列策略
+        default-key-generate-strategy:
+          column:
+          key-generator-name:
 
+        # 默认分片列名称
+        default-sharding-column:
+
+        # 标准分片表配置
+        tables:
+          # 逻辑表名
+          <table-name>:
+            # 真实数据节点
+            # 由数据源名 + 表名组成, 以小数点 "." 组合, 多个表以逗号 "," 分隔, 支持 inline 表达式.
+            # 缺省表示使用已经数据源与逻辑表名称生成数据节点, 用于广播表(即每个库中都需要一个同样的表用于关联查询, 多为字典表) 或只分库
+            # 不分表且所有库的表结构完全一致的情况.
+            actual-data-nodes: ds.t_1, ds.t_2
+
+            # 分库策略
+            database-strategy:
+              # 单分片键的标准分片
+              standard:
+                # 分片列名称
+                sharding-column:
+                # 分片算法名称
+                sharding-algorithm-name:
+
+            # 分布式序列策略设置
+            key-generate-strategy:
+              # 分布式序列列名称
+              column:
+              # 分布式序列算法名称
+              key-generator-name:
+
+            # 分表策略
+            table-strategy:
+              # 单分片键的标准分片
+              standard:
+                # 分片列名称
+                sharding-column:
+                # 分片算法名称
+                sharding-algorithm-name:
+
+        # 自动分片表配置
+        auto-tables:
+          <auto-table-name>:
+            # 数据源名
+            actual-data-sources:
+            sharding-strategy:
+              standard:
+                # 分片列名称
+                sharding-column:
+                # 自动分片算法名称
+                sharding-algorithm-name:
+
+        # 绑定表
+        binding-tables:
+          # 绑定表规则列表
+          -
+          -
+          -
+
+        # 广播表规则列表
+        broadcast-tables:
+          # 广播表规则列表
+          -
+          -
+          -
+
+        sharding-algorithms:
+          <sharding-algorithm-name>:
+            # 分片算法类型
+            type:
+            # 分片算法属性配置
+            props:
+
+        key-generators:
+          <key-generate-algorithm-name>:
+            # 分布式序列算法类型
+            type:
+            # 分布式序列算法属性配置
+            props:
 
