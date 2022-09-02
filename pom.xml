@@ -26,6 +26,7 @@
         <module>algorithm</module>
         <module>concurrent</module>
         <module>spring-cloud-stream</module>
+        <module>shardingsphere-jdbc</module>
     </modules>
 
     <properties>
