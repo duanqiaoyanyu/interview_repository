@@ -10,20 +10,21 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>spring-cloud-stream</artifactId>
+    <artifactId>shardingsphere-jdbc</artifactId>
     <version>${interview-repository.version}</version>
-    <name>spring-cloud-stream</name>
-    <description>spring-cloud-stream</description>
+    <name>shardingsphere-jdbc</name>
+    <description>shardingsphere-jdbc</description>
 
     <properties>
         <java.version>1.8</java.version>
+        <shardingsphere.version>5.1.2</shardingsphere.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
-            <version>3.2.4</version>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+            <version>${shardingsphere.version}</version>
         </dependency>
     </dependencies>
 
