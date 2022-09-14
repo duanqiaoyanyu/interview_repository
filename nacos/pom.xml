@@ -10,10 +10,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>spring-cloud-stream</artifactId>
+    <artifactId>nacos</artifactId>
     <version>${interview-repository.version}</version>
-    <name>spring-cloud-stream</name>
-    <description>spring-cloud-stream</description>
+    <name>nacos</name>
+    <description>nacos</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -21,8 +21,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
     </dependencies>
 
