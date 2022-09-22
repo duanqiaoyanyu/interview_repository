@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.1</version>
+        <version>${spring.boot.version}</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -21,6 +21,7 @@
         <module>relative-path</module>
         <module>regex</module>
         <module>java8</module>
+        <module>nacos</module>
         <module>seata</module>
         <module>thread</module>
         <module>algorithm</module>
@@ -32,6 +33,11 @@
     <properties>
         <java.version>1.8</java.version>
         <interview-repository.version>2.2.0</interview-repository.version>
+
+        <!-- 三者版本依赖关系参考 https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E -->
+        <spring.cloud.version>Hoxton.SR12</spring.cloud.version>
+        <spring.cloud-alibaba.version>2.2.8.RELEASE</spring.cloud-alibaba.version>
+        <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
     </properties>
 
     <dependencies>
@@ -58,6 +64,26 @@
             <version>1.18.24</version>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
