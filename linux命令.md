@@ -396,6 +396,43 @@ tail -n +5 xxx.log
   chown -R -v username:group_name xxx.log
 ```
 
+#### du
+```shell
+# 显示目录或者文件所占空间
+  du
+说明:
+  只显示当前目录下面的子目录的目录大小和当前目录的总的大小, 最下面的为当前目录的总大小
+  
+# 显示指定文件所占空间
+  du log2012.log
+
+# 查看指定目录的所占空间
+  du scf
+  
+# 显示多个文件所占空间
+  du log30.tar.gz log31.tar.gz
+ 
+# 只显示总和的大小
+  du -s
+
+# 方便阅读的格式显示
+  du -h test
+  
+# 文件和目录都显示
+  du -ah test
+  
+# 显示几个文件或目录各自占用磁盘空间的大小, 还统计他们的总和
+  du -c log30.tar.gz log31.tar.g
+说明:
+  加上 -c 选项后, du 不仅显示两个目录各自占用磁盘空间的大小, 还在最后一行统计他们的总和.
+  
+# 按照空间大小排序
+  du| sort -nr | more
+  
+# 输出当前目录下各个子目录所使用的空间
+  du -h --max-depth=1
+```
+
 #### top
 ```shell
 # 显示进程信息
