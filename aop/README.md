@@ -1,4 +1,7 @@
 
+#### 如何让切面 `Aspect` 能够被 Spring 管理. 也就是目标类能够被切面增强
+1. 简单的用 `@Aspect` 和 `@Component` 来标记切面 `aspect`, 然后通过扫描的方式进行(**推荐采用这种方式**)
+2. `@EnableAspectJAutoProxy` + `@Configuration` 并且在配置类中定义切面 `@Bean`
 
 ### 切面定义
 ```java
