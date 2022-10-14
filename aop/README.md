@@ -120,3 +120,5 @@ public class KaoYanAspect {
         return proceed;
     }
 ```
+
+**ProceedingJoinPoint 只能用在环绕通知中, 其他类型的通知都不行**
