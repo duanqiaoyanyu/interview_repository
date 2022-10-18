@@ -1,7 +1,9 @@
 package com.cskaoyan;
 
 import com.cskaoyan.pojo.StoreDTO;
+import com.cskaoyan.pojo.UniversityDTO;
 import com.cskaoyan.service.BusinessService;
+import com.cskaoyan.service.UniversityService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +18,20 @@ public class AopApplicationTests {
 
     @Autowired
     private BusinessService businessService;
+    @Autowired
+    private UniversityService universityService;
 
     @Test
     public void test1() {
         StoreDTO dto = null;
         dto = businessService.open();
         log.info("商店开业详情: {}", dto);
+    }
+
+    @Test
+    public void test2() {
+        UniversityDTO dto = universityService.entrance();
+        System.out.println(dto);
     }
 
 }
