@@ -29,6 +29,7 @@
         <module>concurrent</module>
         <module>spring-cloud-stream</module>
         <module>shardingsphere-jdbc</module>
+        <module>aop</module>
     </modules>
 
     <properties>
