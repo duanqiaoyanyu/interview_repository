@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: distribute-lock
+
+  # redis 配置
+  redis:
+    # 数据库
+    database:
+    # 主机
+    host:
+    # 端口
+    port:
+    # 密码
+    password:
+    # ssl
+    ssl:
+    # 超时
+    timeout:
+    # 集群模式
+    cluster:
+      # 节点
+      nodes:
+    # 哨兵模式
+    sentinel:
+      # 主结点
+      master:
+      # 节点
+      nodes:
+
+    # redisson 配置
+    redisson:
+      file: classpath:redisson.yaml
+
