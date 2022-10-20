@@ -6,6 +6,7 @@ import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,14 +18,15 @@ import java.io.IOException;
 @Configuration
 public class RedissonConfiguration {
 
-    @Value("${spring.redisson.file}")
+    @Value("${spring.redis.redisson.file}")
     private String redissonYamlPath;
 
     @Bean
     RedissonClient config() {
         Config config = null;
         try {
-            config = Config.fromYAML(new File(redissonYamlPath));
+            String path = ResourceUtils.getURL(redissonYamlPath).getPath();
+            config = Config.fromYAML(new File(path));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

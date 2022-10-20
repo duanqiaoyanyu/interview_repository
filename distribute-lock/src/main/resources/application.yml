@@ -5,11 +5,11 @@ spring:
   # redis 配置
   redis:
     # 数据库
-    database:
+    database: 0
     # 主机
-    host:
+    host: "127.0.0.1"
     # 端口
-    port:
+    port: 6379
     # 密码
     password:
     # ssl
@@ -29,5 +29,5 @@ spring:
 
     # redisson 配置
     redisson:
-      file: classpath:redisson.yaml
+      file: classpath:redisson.yml
 
