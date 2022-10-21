@@ -22,7 +22,7 @@ public class RedissonConfiguration {
     private String redissonYamlPath;
 
     @Bean
-    RedissonClient config() {
+    RedissonClient redissonClient() {
         Config config = null;
         try {
             String path = ResourceUtils.getURL(redissonYamlPath).getPath();
