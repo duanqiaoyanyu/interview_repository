@@ -32,6 +32,7 @@
         <module>shardingsphere-jdbc</module>
         <module>aop</module>
         <module>distribute-lock</module>
+        <module>gateway</module>
     </modules>
 
     <properties>
