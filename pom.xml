@@ -6,7 +6,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>${spring.boot.version}</version>
+        <!--这里版本号不能引用 properties里的变量, 不会解析为对应的值 而是会直接当成 “${spring.boot.version}” 认为就是叫这个名字的字符串-->
+        <version>2.3.12.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -30,6 +31,8 @@
         <module>spring-cloud-stream</module>
         <module>shardingsphere-jdbc</module>
         <module>aop</module>
+        <module>distribute-lock</module>
+        <module>gateway</module>
     </modules>
 
     <properties>

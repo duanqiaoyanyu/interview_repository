@@ -122,3 +122,104 @@ public class KaoYanAspect {
 ```
 
 **ProceedingJoinPoint 只能用在环绕通知中, 其他类型的通知都不行**
+
+#### 当有多个切面, 可以用 `@Order(value = ?)` 来控制切面的顺序, `value` 是整数, 值越小, 优先级越高. 越先进入切面
+> 然后也和 `Filte` 的设计很像, `Filter` 有多个会组成过滤器链, 然后以 `doFilter` 为界限是一个栈的结构. 对应到这里也是一样的, 以 `目标方法 proceed()` 为界限. 目标方法前的方法, 谁的优先级高谁先执行. 目标方法后的方法, 谁的优先级高谁后执行
+
+```java
+/**
+ * @author duanqiaoyanyu
+ * @date 2022/10/12 10:54
+ */
+@Slf4j
+@Order(value = 1)
+@Aspect
+@Component
+public class UniversityAspect {
+    
+    @Pointcut(value = "execution(* com.cskaoyan.service.impl.ComplexServiceImpl.study())")
+    public void pointcut() {
+
+    }
+
+    @Around("pointcut()")
+    public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        log.info("[环绕前逻辑-大学切面]");
+        Object proceed = proceedingJoinPoint.proceed();
+        log.info("[环绕后逻辑-大学切面]");
+
+        return proceed;
+    }
+
+    @Before("pointcut()")
+    public void before() {
+        log.info("[前置通知-大学切面]");
+    }
+
+    @AfterReturning("pointcut()")
+    public void afterReturning() {
+        log.info("[返回通知-大学切面]");
+    }
+
+    @AfterThrowing("pointcut()")
+    public void afterThrowing() {
+        log.info("[异常通知-大学切面]");
+    }
+
+    @After("pointcut()")
+    public void after() {
+        log.info("[后置通知-大学切面]");
+    }
+}
+
+```
+
+```java
+@Slf4j
+@Aspect
+@Order(value = 2)
+@Component
+public class GraduateAspect {
+
+    @Pointcut(value = "execution(* com.cskaoyan.service.impl.ComplexServiceImpl.study())")
+    public void pointcut() {
+
+    }
+
+    @Around("pointcut()")
+    public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        log.info("[环绕前逻辑-研究生切面]");
+        Object proceed = proceedingJoinPoint.proceed();
+        log.info("[环绕后逻辑-研究生切面]");
+
+        return proceed;
+    }
+
+    @Before("pointcut()")
+    public void before() {
+        log.info("[前置通知-研究生切面]");
+    }
+
+    @AfterReturning("pointcut()")
+    public void afterReturning() {
+        log.info("[返回通知-研究生切面]");
+    }
+
+    @AfterThrowing("pointcut()")
+    public void afterThrowing() {
+        log.info("[异常通知-研究生切面]");
+    }
+
+    @After("pointcut()")
+    public void after() {
+        log.info("[后置通知-研究生切面]");
+    }
+}
+```
+
+**当存在多个切面的时候的各个通知的顺序(示范只有2个切面)**
+1. 大学切面 `@Order(value = 1)`
+2. 研究生切面 `@Order(value = 2)`
+
+**切面是有顺序的, 只有走完一个切面的一部分流程才会到第二个切面, 而不是说按通知顺序, 不能理解为走完所有的 环绕前 才会进到 前置, 整体按照切面顺序来的**
+`Around 前逻辑 [大学切面]` -> `Before [大学切面]` -> `Around 前逻辑 [研究生切面]` -> `Before [研究生切面]` -> `目标方法(分界线)` -> `AfterReturning [研究生切面]` -> `After [研究生切面]` -> `Around 后逻辑 [研究生切面]` -> `AfterReturning [大学切面]` -> `After [大学切面]` -> `Around 后逻辑 [大学切面]`
