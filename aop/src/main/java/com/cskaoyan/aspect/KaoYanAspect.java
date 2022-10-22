@@ -27,27 +27,27 @@ public class KaoYanAspect {
 
     @Before("pointcut()")
     public void prepareFood() {
-        log.info("[前置通知] 方法执行前...");
+        log.info("[前置通知-考研切面] 方法执行前...");
     }
 
     @After("pointcut()")
     public void afterMethod() {
-        log.info("[后置通知] 方法执行后...");
+        log.info("[后置通知-考研切面] 方法执行后...");
     }
 
     @AfterReturning("pointcut()")
     public void afterReturn() {
-        log.info("[返回通知] 方法执行后...");
+        log.info("[返回通知-考研切面] 方法执行后...");
     }
 
     @AfterThrowing("pointcut()")
     public void afterThrowing() {
-        log.info("[异常通知] 抛出异常后...");
+        log.info("[异常通知-考研切面] 抛出异常后...");
     }
 
     @Around("pointcut()")
     public Object aroundMethod(ProceedingJoinPoint proceedingJoinPoint) {
-        log.info("[环绕通知] 目标方法执行前...");
+        log.info("[环绕通知-考研切面] 目标方法执行前...");
         Object proceed = null;
         try {
             proceed = proceedingJoinPoint.proceed();
