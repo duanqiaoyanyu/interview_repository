@@ -33,6 +33,7 @@
         <module>aop</module>
         <module>distribute-lock</module>
         <module>gateway</module>
+        <module>spring-cloud-security</module>
     </modules>
 
     <properties>
