@@ -33,6 +33,7 @@
         <module>aop</module>
         <module>distribute-lock</module>
         <module>gateway</module>
+        <module>spring-cloud-security</module>
     </modules>
 
     <properties>
@@ -45,6 +46,10 @@
         <spring.cloud.version>Hoxton.SR12</spring.cloud.version>
         <spring.cloud-alibaba.version>2.2.8.RELEASE</spring.cloud-alibaba.version>
         <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
+
+        <hutool.version>5.8.3</hutool.version>
+        <lombok.version>1.18.24</lombok.version>
+        <fastjson.version>2.0.17</fastjson.version>
     </properties>
 
     <dependencies>
@@ -62,13 +67,19 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.8.3</version>
+            <version>${hutool.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
         </dependency>
     </dependencies>
 
