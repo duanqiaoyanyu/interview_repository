@@ -8,3 +8,11 @@
 1. 第一级为 `singletonObjects`: 单例对象的 `Cache`
 2. 第二级为 `earlySingletonObjects`: **提前曝光**的单例对象的 `Cache`
 3. 第三级为 `singletonFactories`: 单例对象工厂的 `Cache`
+
+过程:  
+- 首先, 从一级缓存 `singletonObjects` 获取
+- 如果一级缓存中没有并且当前指定的 `beanName` 正在创建, 就再从二级缓存 `earlySingletonObjects` 中获取.
+- 如果二级缓存中还是没忽悠获取到且允许 `singletonFactories` 通过 `#getObject()` 方法获取, 则从三级缓存 `singletonFactories`
+获取. 如果获取到, 则通过其 `#getObject()` 方法, 获取对象, 并将其加入到二级缓存 `earlySingletonObjects` 中, 并从三级缓存 `singletonFactories` 删除.
+- 这样, 就从三级缓存 **升级** 到二级缓存了
+- 所以, 二级缓存存在的意义, 就是缓存三级缓存中的 `ObjectFactory` 的 `#getObject()` 方法的执行结果, 提早曝光的 **单例** `Bean` 对象.
