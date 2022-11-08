@@ -34,6 +34,7 @@
         <module>distribute-lock</module>
         <module>gateway</module>
         <module>spring-cloud-security</module>
+        <module>ioc</module>
     </modules>
 
     <properties>
