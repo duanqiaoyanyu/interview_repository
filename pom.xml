@@ -35,6 +35,9 @@
         <module>gateway</module>
         <module>spring-cloud-security</module>
         <module>ioc</module>
+        <module>rabbitmq</module>
+        <module>linux</module>
+        <module>prometheus</module>
     </modules>
 
     <properties>
