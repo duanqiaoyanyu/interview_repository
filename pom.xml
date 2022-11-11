@@ -38,6 +38,10 @@
         <module>rabbitmq</module>
         <module>linux</module>
         <module>prometheus</module>
+        <module>git</module>
+        <module>maven</module>
+        <module>mysql</module>
+        <module>jetbrains</module>
     </modules>
 
     <properties>
