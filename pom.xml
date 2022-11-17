@@ -42,6 +42,7 @@
         <module>maven</module>
         <module>mysql</module>
         <module>jetbrains</module>
+        <module>style-guide</module>
     </modules>
 
     <properties>
