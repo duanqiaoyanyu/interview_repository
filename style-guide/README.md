@@ -556,3 +556,62 @@ somethingThatYieldsAFoo().aStaticMethod(); // very bad
 嫉妒罕有去覆盖 `Object.finalize`  
 
 > 不要那么做, 如果你绝对必须, 第一步阅读和理解 `Effective Java Item 8`, "避免最终项和清除者" 非常仔细, 然后不要那么做.
+
+
+### 7 Javadoc
+
+#### 7.1 格式
+
+##### 一般形式
+Javadoc 块的基础格式化就像这个例子中的那样
+```java
+/**
+ * Multiple lines of Javadoc text are written here,
+ * wrapped normally...
+ */
+public int method(String p1) { ... }
+```
+
+或者这种单行例子:  
+/** An especially short bit of Javadoc. */
+
+基本形式经常是可以接受的. 单行形式或许被替代当整个 Javadoc块(包含注释标记者)可以适用于单行. 提到这个仅仅运用于没有块标签比如 `@return`.  
+
+##### 7.1.2 段落
+一个空白行-那是, 一行包括仅仅对齐的引导星号(`*`)出现在段落之间, 并且在块标签组之间如果存在. 每一个段落除了第一个有 `<p>`立即在它的第一个单词,
+在它后面没有空格. HTML 标签对于其他块级别元素, 比如 `<ul>` 或者 `<table>`, 前面不用 `<p>`.
+
+##### 7.1.3 块标签
+任何使用的标准"块标签"出现以顺序 `@param`, `@return`, `@throws`, `@deprecate`, 并且这四种类型从不出现空的说明. 当一个块标签不适合当行, 持续性
+的行是缩进 4(或者更多)空格从 `@` 这个位置.
+
+#### 7.2 摘要片段
+
+每一个 Javadoc 块以一个简要的摘要片段开始. 这个片段是非常重要的: 他是出现在比如类和方法索引的确定上下文的的文本的唯一部分.  
+
+这时一个片段-一个名词短语或者动词短语, 不是一个完整的句子. 它不用 `A {@code Foo} is a...` 开头, 或者 `This method returns...`, 也不是
+从一个完整的至关重要的句子比如 `Save the record`. 然而, 该片段被大写并标点符号, 就好像他是一个完整的句子一样.  
+
+> 贴士: 一个公共的事务是写简单的 Javadoc 用这种形式 `/** @return the customer ID */`. 这时不对的, 应该改为 `/** Returns the customer ID. */`.
+
+#### 7.3 哪里使用 Javadoc
+在最小的, Javadoc 存在于每一个 `public` 类, 和每一个这个类的 `public` 或者 `protected`成员, 一些异常记录在下面.  
+
+除了 Javadoc 内容或许存在, 在 7.3.4节 解释的那样, 不需要 Javadoc.  
+
+##### 7.3.1 异常: 不言自明的成员
+Javadoc 对于 "简单, 显而易见"的成员是可选的, 比如像 `getFoo()`, 万一这里真的和事实上没有价值的去说 "Returns the foo".  
+
+> 重要: 不合适去引用这个异常去证明合法忽略一个典型的读者或许需要知道的相关信息. 比如, 对于一个方法命名 `getCanonicalName`, 不葫芦它的文档(
+理由是它只会说 `/** Returns the canonical name. */``) 如果一个典型读者或许会对于术语 "canonical name" 是什么意思没有主意.  
+
+##### 7.3.2 异常: 覆盖
+Javadoc 不总是出现在一个覆盖了父类方法的方法上.  
+
+##### 不需要 Javadoc
+
+其他类和成员有 Javadoc 作为需要或者意愿.  
+
+无论何时一个实现注释将会被用于定义一个类或者成员的所有目的和行为, 注释用 Javadoc 而不是(使用 `/**``).  
+
+不需要 Javadoc 不是严格要求遵循 7.1.1, 7.1.2, 7.1.3, 和 7.2, 的格式规则, 尽管这当然是推荐的.
