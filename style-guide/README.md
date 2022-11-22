@@ -403,4 +403,109 @@ public protected private abstract default static final transient volatile synchr
 
 ### 5 命名
 
-#### 所有的缩进的公共规则
+#### 5.1 所有的标识符的公共规则
+标识符仅仅使用 ASCII 字母和数字, 并且, 一下标记的例子的最小数量, 下划线. 因此每一个合理的标识符名字被正则表达式 `\w+` 匹配.  
+在谷歌风格, 不使用特殊前缀或者后缀. 举个例子, 这些名字不是谷歌风格: `name_`, `mName`, `s_name` 和 `kName`.  
+
+#### 5.2 标识符类型的规则
+
+##### 5.2.1 包名
+
+包名仅仅使用小写字母和数字(下划线). 连续的单词时简单的串联在一起. 举个例子, `com.example.deepspace`, 而不是 `com.example.deepSpace` 或者
+`com.example.deep_space`.  
+
+##### 5.2.2 类名
+
+类型用大写驼峰书写.  
+
+类名是典型的名词或者名词短语. 举例, `Character` 或者 `ImmutableList`. 接口名字或许会是名词或者名词短语(举例, `List`), 但是或许有时候会是
+形容词或者形容词短语替换(举例, `Readable`).  
+对于命名注解类型没有指定的规则或者甚至很好的建设性惯例  
+一个测试类有一个以 `Test` 结尾的名字, 举例, `HashIntegrationTest`. 如果覆盖一个单类, 它的名字就是类名加上 `Test`, 举例 `HashImplTest`.  
+
+##### 5.2.3 方法名字
+
+方法名字用小写驼峰书写.  
+方法名字是典型的动词或者动词短语. 举例, `sendMessage` 或者 `stop`.  
+
+下划线或许会出现在单元测试方法名中去分隔名字的逻辑组件, 对于每一个在小写驼峰中的组件, 举例, `transferMoney_deductsFromSource`. 没有一个
+正确的方式去命名测试方法.  
+
+##### 5.2.4 常量名字
+
+常量名字使用 `UPPER_SNAKE_CASE`: 所有大写字母, 并且每一个单词与下一个单词分隔通过一个单独的下划线. 但是什么是一个常量, 精确的?  
+
+常量是静态最终的字段它的内容是深度不变的并且它的方法没有可探测性的副作用. 例子包括 原始值, 串, 不变值类, 并且设置为 `null` 的任何东西. 如果例子的
+可观测的状态可以改变, 他不是一个常量.  
+仅仅意图去从不变这个对象是不够的. 举个例子:  
+
+```java
+// Constants
+static final int NUMBER = 5;
+static final ImmutableList<String> NAMES = ImmutableList.of("Ed", "Ann");
+static final Map<String, Integer> AGES = ImmutableMap.of("Ed", 35, "Ann", 32);
+static final Joiner COMMA_JOINER = Joiner.on(','); // because Joiner is immutable
+static final SomeMutableType[] EMPTY_ARRAY = {};
+
+// Not constants
+static String nonFinal = "non-final";
+final String nonStatic = "non-static";
+static final Set<String> mutableCollection = new HashSet<String>();
+static final ImmutableSet<SomeMutableType> mutableElements = ImmutableSet.of(mutable);
+static final ImmutableMap<String, SomeMutableType> mutableValues =
+    ImmutableMap.of("Ed", mutableInstance, "Ann", mutableInstance2);
+static final Logger logger = Logger.getLogger(MyClass.getName());
+static final String[] nonEmptyArray = {"these", "can", "change"};
+```
+这些名字是典型的名词或者名词短语.  
+
+##### 5.2.5 非常量字段名字
+
+非常量字段名字(静态或者其他的)用小写驼峰书写.  
+这些名字是典型的名词或者名词短语. 举个例子, `computedValues` 或者 `index`.
+
+##### 5.2.6 参数名字
+
+参数名字用小写驼峰写
+一个字符的参数名字在公共方法中应该被避免
+
+##### 5.2.7 本地变量名
+
+本地变量名用小写驼峰写.  
+甚至当最终或者不变, 本地变量也不考虑设置为常量, 并且不应该设置为常量的风格
+
+##### 5.2.8 类型变量名字
+每一个类型变量命名有两种风格:  
+- 一个大写字母, 可选择的跟随一个数字(比如像 `E`, `T`, `X`, `T2`)
+- 用给类的形式命名(见 5.2.2节, 类名), 跟随一个大写字母 `T`(举例: `RequestT`, `FooBarT`).
+
+#### 5.3 驼峰: 定义
+有时候有多种合理性的方式去转换一个英文短语为一个驼峰, 比如当缩写词或者不寻常构造比如 "IPV6" 或者 "iOS" 存在. 未来提高可预测性, 谷歌风格指定下列
+决定性的约束.  
+
+从名字的散文形式开始:  
+1. 转换短语去平 ASCII 并且一处任何撇号. 举例, "Müller's algorithm" 或许会变成 "Muellers algorithm".  
+2. 划分这个结果到单词, 在空间和任意一六的标点上撕裂(典型连字符).  
+   - 推荐: 如果一个单词在公众使用中早已有一个惯例驼峰外形, 撕裂它为他的连续部分(e.g., "AdWords" 变成 "ad words"). 提到一个单词像 "iOS" 不是
+真的是驼峰; 它定义了一个惯例, 所以这个推荐不适用.  
+3. 现在小写字母一切(包括缩写词), 然后大写第一个字符:  
+   - ... 每个单词, 以产生大驼峰大小写, 或
+   - ... 除第一个单词外的每个单词, 以产生小驼峰大小写  
+4. 最终, 加入所有的单词到一个单标识符  
+
+注意到源单词的大小写通常整个无视. 例子:  
+
+| Prose form         | Correct           | Incorrect |
+|:-------------------|:------------------| :--- |
+| "XML HTTP request" | XmlHttpRequest    | XMLHTTPRequest |
+| "new customer ID"  | newCustomerId     | newCustomerID |
+| "inner stopwatch" | innerStopwatch    | innerStopWatch |
+| "supports IPv6 on iOS?" | supportsIpv6OnIos | supportsIPv6OnIOS |
+| "YouTube importer" | YouTubeImporter   |  |
+| "YouTube importer" | YoutubeImporter * |  |
+  
+*可接受的, 但是不推荐.
+
+> 注意: 一些单词在英语里连字符是模棱两可的: 举个例子 "nonempty" 和 "non-empty" 都是正确的, 所以方法名字相似都是正确 `checkNonempty` 和 `checkNonEmpty`
+
+### 6. 编程实战
