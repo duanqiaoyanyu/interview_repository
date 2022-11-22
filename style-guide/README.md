@@ -509,3 +509,50 @@ static final String[] nonEmptyArray = {"these", "can", "change"};
 > 注意: 一些单词在英语里连字符是模棱两可的: 举个例子 "nonempty" 和 "non-empty" 都是正确的, 所以方法名字相似都是正确 `checkNonempty` 和 `checkNonEmpty`
 
 ### 6. 编程实战
+
+#### 6.1 `@Override`: 经常使用
+一个方法标记 `@Override` 注解只要方法是合法的. 者包括一个类方法覆盖一个父类的方法, 一个类方法实现一个接口的方法, 和一个接口方法相关的一个父接口方法.
+  
+异常: `@Override` 或许会忽略当它的父方法是 `@Deprecate`
+
+#### 6.2 捕获异常: 不忽略
+  
+期待像下面标记的一样, 不做任何事在响应里去捕获一个异常是罕有正确.(典型的响应是去日志它, 或者如果它被认为 "不肯能", 重新抛出它作为一个 `AssertionError``)  
+
+当它真的合适去不采取任何行为在一个捕获块里, 理由用一个注释解释这时合理的.  
+
+```java
+try {
+  int i = Integer.parseInt(response);
+  return handleNumericResponse(i);
+} catch (NumberFormatException ok) {
+  // it's not numeric; that's fine, just continue
+}
+return handleTextResponse(response);
+```
+
+异常: 在测试, 一个捕获异常或许会忽略且没有注释, 如果它的名字是或者以 `expected` 开头. 下列是一个非常常见的语法对于确保测试下的代码确实抛出了一个期望的异常,
+所以在这里注释是没必要的.  
+
+```java
+try {
+  emptyStack.pop();
+  fail();
+} catch (NoSuchElementException expected) {
+}
+```
+
+#### 6.3 静态成员: 合格使用类
+当引用一个静态类成员必须合格, 合格用类名, 不是一个引用或者类类型的表达式
+
+```java
+Foo aFoo = ...;
+Foo.aStaticMethod(); // good
+aFoo.aStaticMethod(); // bad
+somethingThatYieldsAFoo().aStaticMethod(); // very bad
+```
+
+#### 6.4 最终项: 不使用
+嫉妒罕有去覆盖 `Object.finalize`  
+
+> 不要那么做, 如果你绝对必须, 第一步阅读和理解 `Effective Java Item 8`, "避免最终项和清除者" 非常仔细, 然后不要那么做.
