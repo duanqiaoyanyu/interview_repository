@@ -323,6 +323,10 @@ scp local_file remote_username@remote_ip:remote_directory/remote_file 指定了�
 scp remote_username@remote_ip:remote_directory/remote_file local_directory
 scp remote_username@remote_ip:remote_directory/remote_file local_directory/local_file
 
+// 从远程服务器 复制到 本地服务器(指定端口)  
+scp -r -P remote_port username@remote_ip:remote_directory local_directory
+> -r 代表的是递归复制整个文件夹, -P 是指定端口. 因为有可能数据传输用到的端口号不是默认的
+
 #### tail
 ```shell
 # 显示文件末尾内容
