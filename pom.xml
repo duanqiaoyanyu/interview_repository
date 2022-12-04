@@ -43,6 +43,7 @@
         <module>mysql</module>
         <module>jetbrains</module>
         <module>style-guide</module>
+        <module>mybatis-plus</module>
     </modules>
 
     <properties>
@@ -59,6 +60,7 @@
         <hutool.version>5.8.3</hutool.version>
         <lombok.version>1.18.24</lombok.version>
         <fastjson.version>2.0.17</fastjson.version>
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
     </properties>
 
     <dependencies>
@@ -89,6 +91,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
         </dependency>
     </dependencies>
 
