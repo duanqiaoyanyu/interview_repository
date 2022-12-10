@@ -9,12 +9,20 @@ spring:
       names: ds1,ds2
 
     # 配置数据源
+      # <actual-data-source-name> 表示真实数据源名称
       ds1:
+        # 数据库连接池全类名
         type: com.zaxxer.hikari.HikariDataSource
+        # 数据库驱动类名，以数据库连接池自身配置为准
         driver-class-name: com.mysql.jdbc.Driver
+        # 数据库 URL 连接，以数据库连接池自身配置为准
         jdbc-url: jdbc:mysql://localhost:3306/ds1
+        # 数据库用户名，以数据库连接池自身配置为准
         username: root
+        # 数据库密码，以数据库连接池自身配置为准
         password:
+        # ... 数据库连接池的其它属性
+        <xxx>:
 
       ds2:
         type: com.zaxxer.hikari.HikariDataSource
@@ -55,14 +63,29 @@ spring:
             # 只分库不分表且所有库的表结构完全一致的情况.
             actual-data-nodes: ds.t_1, ds.t_2
 
-            # 分库策略
+            # 分库策略，缺省表示使用默认分库策略，以下的分片策略只能选其一
             database-strategy:
-              # 单分片键的标准分片
+              # 用于单分片键的标准分片场景
               standard:
                 # 分片列名称
                 sharding-column:
                 # 分片算法名称
                 sharding-algorithm-name:
+
+              # 用于多分片键的复合分片场景
+              complex:
+                # 分片列名称，多个列以逗号分隔
+                sharding-columns:
+                # 分片算法名称
+                sharding-algorithm-name:
+
+              # 用于 Hint 的分片策略
+              hint:
+                # 分片算法名称
+                sharding-algorithm-name:
+
+              # 默认分库策略, 即不分库
+              none:
 
             # 分布式序列策略设置
             key-generate-strategy:
@@ -71,7 +94,14 @@ spring:
               # 分布式序列算法名称
               key-generator-name:
 
-            # 分表策略
+            # 分片审计策略配置
+            audit-strategy:
+              # 分片审计算法名称
+              auditor-names:
+              # 是否禁用分片审计hint
+              allow-hint-disable:
+
+            # 分表策略，缺省表示使用默认分表策略，以下的分片策略只能选其一
             table-strategy:
               # 单分片键的标准分片
               standard:
@@ -79,6 +109,21 @@ spring:
                 sharding-column:
                 # 分片算法名称
                 sharding-algorithm-name:
+
+              # 用于多分片键的复合分片场景
+              complex:
+                # 分片列名称，多个列以逗号分隔
+                sharding-columns:
+                # 分片算法名称
+                sharding-algorithm-name:
+
+              # 用于 Hint 的分片策略
+              hint:
+                # 分片算法名称
+                sharding-algorithm-name:
+
+              # 默认分表策略, 即不分表
+              none:
 
         # 自动分片表配置
         auto-tables:
@@ -106,19 +151,35 @@ spring:
           -
           -
 
+        # 分片算法配置
         sharding-algorithms:
           <sharding-algorithm-name>:
             # 分片算法类型
             type:
             # 分片算法属性配置
             props:
+              <key1>: value1
+              <key2>: value2
 
+        # 分布式序列算法配置
         key-generators:
           <key-generate-algorithm-name>:
             # 分布式序列算法类型
             type:
             # 分布式序列算法属性配置
             props:
+              <key1>: value1
+              <key2>: value2
+
+        # 分片审计算法配置
+        auditors:
+          <sharding-audit-algorithm-name>:
+            # 分片审计算法类型
+            type:
+            # 分片审计算法属性配置
+            props:
+              <key1>: value1
+              <key2>: value2
 
     # 系统级配置
     props:
