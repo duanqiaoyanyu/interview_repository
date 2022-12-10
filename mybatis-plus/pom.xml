@@ -10,22 +10,16 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>shardingsphere-jdbc</artifactId>
+    <artifactId>mybatis-plus</artifactId>
     <version>${interview-repository.version}</version>
-    <name>shardingsphere-jdbc</name>
-    <description>shardingsphere-jdbc</description>
+    <name>mybatis-plus</name>
+    <description>mybatis-plus</description>
 
     <properties>
         <java.version>1.8</java.version>
-        <shardingsphere.version>5.2.1</shardingsphere.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.shardingsphere</groupId>
-            <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
-            <version>${shardingsphere.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
