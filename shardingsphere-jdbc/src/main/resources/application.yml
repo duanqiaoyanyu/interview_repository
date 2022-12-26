@@ -151,7 +151,7 @@ spring:
           -
           -
 
-        # 分片算法配置
+        # 分片算法配置(算法名首字母不能大写, 否则下面的 props 属性无法正常赋值, 不知道官方什么原因的 bug)
         sharding-algorithms:
           <sharding-algorithm-name>:
             # 分片算法类型
