@@ -22,6 +22,11 @@ package com.cskaoyan.algorithm;
  * 利用拓展位, 回拨之后在拓展位上加1就可以了, 这样ID依旧可以保持唯一. 但是这个要求我们提前预留出位数, 要么从机器id中, 要么从序列号中, 腾出一定
  * 位, 在时间回拨的时候, 这个位置+1.
  *
+ * 参考资料:
+ * 1. https://zhuanlan.zhihu.com/p/85837641
+ * 2. https://segmentfault.com/a/1190000040964518
+ * 3. https://cloud.tencent.com/developer/article/1772047
+ *
  * @author duanqiaoyanyu
  * @date 2022/12/23 16:39
  */
