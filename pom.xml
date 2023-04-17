@@ -50,7 +50,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <interview-repository.version>3.8.4</interview-repository.version>
+        <interview-repository.version>3.8.5</interview-repository.version>
 
         <!-- 三者版本依赖关系参考 https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E -->
         <spring.cloud.version>Hoxton.SR12</spring.cloud.version>
