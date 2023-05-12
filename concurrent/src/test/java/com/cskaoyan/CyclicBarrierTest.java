@@ -118,7 +118,7 @@ public class CyclicBarrierTest {
         @Override
         public void run() {
             d = a + b + c;
-            System.out.println("\n回调任务: d = a + b + c = " + d);
+            System.out.println("\n 线程执行" + Thread.currentThread().getName() + "回调任务: d = a + b + c = " + d);
         }
     }
 }
