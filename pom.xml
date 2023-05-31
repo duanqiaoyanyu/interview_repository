@@ -28,6 +28,8 @@
         <module>thread</module>
         <module>algorithm</module>
         <module>concurrent</module>
+        <module>data-structure</module>
+        <module>design-pattern</module>
         <module>spring-cloud-stream</module>
         <module>shardingsphere-jdbc</module>
         <module>aop</module>
