@@ -1,4 +1,4 @@
-package com.cskaoyan;
+package com.cskaoyan.singleton;
 
 /**
  * 双重检查锁

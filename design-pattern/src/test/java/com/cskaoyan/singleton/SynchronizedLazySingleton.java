@@ -1,4 +1,4 @@
-package com.cskaoyan;
+package com.cskaoyan.singleton;
 
 /**
  * 多线程中很好的工作, 而且也是懒加载。但是效率很低

@@ -1,4 +1,4 @@
-package com.cskaoyan;
+package com.cskaoyan.singleton;
 
 /**
  * 懒加载 多线程不能正常工作

@@ -1,4 +1,4 @@
-package com.cskaoyan;
+package com.cskaoyan.singleton;
 
 /**
  * @author duanqiaoyanyu

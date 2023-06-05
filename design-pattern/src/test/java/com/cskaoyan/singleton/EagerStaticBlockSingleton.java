@@ -1,4 +1,4 @@
-package com.cskaoyan;
+package com.cskaoyan.singleton;
 
 /**
  * 表面上看起来差别挺大, 饿汉 {@link EagerSingleton}差不多。都是在类初始化即实例化 instance

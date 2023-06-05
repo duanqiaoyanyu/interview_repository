@@ -1,4 +1,4 @@
-package com.cskaoyan;
+package com.cskaoyan.singleton;
 
 /**
  * 基于 classloader 机制避免了多线程的同步问题, 不过, instance 在类装载时就实例化, 虽然导致类装载的原因有很多种, 在单例模式中大多数都是调用
