@@ -46,6 +46,7 @@
         <module>jetbrains</module>
         <module>style-guide</module>
         <module>mybatis-plus</module>
+        <module>mockito</module>
     </modules>
 
     <properties>
